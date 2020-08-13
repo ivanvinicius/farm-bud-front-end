@@ -55,3 +55,22 @@ export const Adress = styled.div`
   grid-template-columns: 2fr 4fr;
   column-gap: 1.5rem;
 `;
+
+export const SelectBlock = styled.div`
+  position: relative;
+
+  label {
+    font-size: 1.4rem;
+  }
+
+  &:focus-within::after {
+    content: '';
+    width: calc(100% - 3.2rem);
+    height: 2px;
+    background: var(--color-primary-light);
+    position: absolute;
+    left: 1.6rem;
+    right: 1.6rem;
+    bottom: 0;
+  }
+`;

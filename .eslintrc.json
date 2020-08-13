@@ -29,6 +29,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "@typescript-eslint/ban-types": "off",
     "no-unused-expressions": "off",
     "react-hooks/rules-of-hooks": "error",

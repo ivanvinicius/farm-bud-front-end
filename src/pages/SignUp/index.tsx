@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Select from 'react-select/';
 
 import Input from '../../components/Input';
-import Select from '../../components/Select';
 
-import { Container, Card, Adress } from './styles';
+import { customStyles } from '../../styles/select';
+import { Container, Card, Adress, SelectBlock } from './styles';
 
 const SignUp: React.FC = () => {
+  const states = [{ value: '1', label: 'SC' }];
+  const cities = [{ value: 'taio', label: 'Rio do Sul' }];
+
   return (
     <Container>
       <Card>
@@ -26,16 +30,30 @@ const SignUp: React.FC = () => {
             placeholder="Digite a senha"
           />
           <Adress>
-            <Select
-              name="state"
-              label="Estado"
-              options={[{ value: 'SC', label: 'SC' }]}
-            />
-            <Select
-              name="city"
-              label="Cidade"
-              options={[{ value: 'taio', label: 'Rio do Sul' }]}
-            />
+            <SelectBlock>
+              <label>Estado</label>
+              <Select
+                styles={customStyles}
+                id="state"
+                name="states"
+                options={states}
+                isClearable
+                placeholder="Selecione"
+              />
+            </SelectBlock>
+
+            <SelectBlock>
+              <label>Cidades</label>
+              <Select
+                id="cities"
+                styles={customStyles}
+                name="cities"
+                options={cities}
+                isSearchable
+                isClearable
+                placeholder="Selecione"
+              />
+            </SelectBlock>
           </Adress>
 
           <button type="submit">Cadastrar</button>
