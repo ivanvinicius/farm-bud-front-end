@@ -32,16 +32,6 @@ export const Card = styled.div`
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
-
-    button {
-      border: 0;
-      color: var(--color-button-text);
-      background: var(--color-secundary);
-
-      &:hover {
-        background: var(--color-secundary-dark);
-      }
-    }
   }
 
   a {

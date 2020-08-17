@@ -26,16 +26,6 @@ export const Card = styled.div`
 
   form {
     width: 90%;
-
-    button {
-      background: var(--color-secundary);
-      color: var(--color-button-text);
-      border: 0;
-
-      &:hover {
-        background: var(--color-secundary-dark);
-      }
-    }
   }
 
   a {
