@@ -11,35 +11,30 @@ import Button from '../../components/Button';
 
 import { Container, Card, Adress, SelectBlock } from './styles';
 
-import ISelectOptionProps from '../../dtos/ISelectOptionProps';
+import ISelectOption from '../../dtos/ISelectOption';
 
-interface IResponseData {
+interface IResponseAPI {
   id: string;
   name: string;
 }
 
-interface IProviderData {
+interface IProvider {
   city_id: string;
   name: string;
   email: string;
   password: string;
 }
 
-type IState = ISelectOptionProps;
-type ICity = ISelectOptionProps;
-type IStateResponse = IResponseData;
-type ICityResponse = IResponseData;
-
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const [states, setStates] = useState<IState[]>();
-  const [cities, setCities] = useState<ICity[]>();
+  const [states, setStates] = useState<ISelectOption[]>();
+  const [cities, setCities] = useState<ISelectOption[]>();
 
   useEffect(() => {
     api.get('/states').then((response) => {
-      const formatedStates: IState[] = [];
+      const formatedStates: ISelectOption[] = [];
 
-      response.data.map(({ id, name }: IStateResponse) => {
+      response.data.map(({ id, name }: IResponseAPI) => {
         return formatedStates.push({ value: id, label: name });
       });
 
@@ -47,30 +42,38 @@ const SignUp: React.FC = () => {
     });
   }, []);
 
-  const handleFindCityByState = useCallback(async ({ value }: any) => {
-    const formatedCities: ICity[] = [];
+  /* eslint-disable-next-line */
+  const handleFindCityByState = useCallback(async (data: any): Promise<
+    React.SetStateAction<ISelectOption | void>
+  > => {
+    if (!data) {
+      return setCities([]);
+    }
 
-    const response = await api.get('/adresses', {
+    const { value } = data;
+    const formatedCities: ISelectOption[] = [];
+
+    const response = await api.get('/cities', {
       params: {
         state_id: value,
       },
     });
 
-    response.data.map(({ id, name }: ICityResponse) => {
+    response.data.map(({ id, name }: IResponseAPI) => {
       return formatedCities.push({ value: id, label: name });
     });
 
-    setCities(formatedCities);
+    return setCities(formatedCities);
   }, []);
 
-  const handleSubmitForm = useCallback(async (data: IProviderData) => {
+  const handleSubmitForm = useCallback(async (data: IProvider) => {
     await api.post('/providers', data);
   }, []);
 
   return (
     <Container>
       <Card>
-        <h3>Dados do cadastro</h3>
+        <h2>Dados do cadastro</h2>
 
         <Form ref={formRef} onSubmit={handleSubmitForm}>
           <Input
@@ -91,8 +94,9 @@ const SignUp: React.FC = () => {
               <Select
                 name="state"
                 options={states}
-                isClearable
                 placeholder="Selecione"
+                isClearable
+                isSearchable
                 onChange={handleFindCityByState}
               />
             </SelectBlock>
@@ -103,7 +107,9 @@ const SignUp: React.FC = () => {
                 name="city"
                 options={cities}
                 isClearable
+                isSearchable
                 placeholder="Selecione"
+                noOptionsMessage={() => 'Primeiro selecione o UF'}
               />
             </SelectBlock>
           </Adress>

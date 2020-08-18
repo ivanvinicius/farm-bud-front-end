@@ -12,8 +12,8 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.div`
-  width: 40%;
-  height: 95%;
+  width: 43%;
+  height: 93%;
 
   display: flex;
   align-items: center;
@@ -34,6 +34,14 @@ export const Card = styled.div`
 
     &:hover {
       color: var(--color-primary);
+    }
+  }
+
+  /* acima de 1369px aplicar regra */
+  @media (min-width: 1369px) {
+    & {
+      width: 35%;
+      height: 75%;
     }
   }
 `;

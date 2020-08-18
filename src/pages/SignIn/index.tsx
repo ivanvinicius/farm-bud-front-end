@@ -1,27 +1,37 @@
 import React, { useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 
-import api from '../../services/api';
+import { useAuth } from '../../hooks/auth';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Card } from './styles';
 
+interface ISignInFormData {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const { signIn } = useAuth();
+  const history = useHistory();
 
-  const handleSubmit = useCallback(async (data: any) => {
-    try {
-      const response = await api.post('/sessions', data);
+  const handleSubmit = useCallback(
+    async ({ email, password }: ISignInFormData): Promise<Number | void> => {
+      try {
+        await signIn({ email, password });
 
-      console.log(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+        return history.push('/');
+      } catch (err) {
+        return 3 + 1;
+      }
+    },
+    [signIn, history],
+  );
 
   return (
     <Container>

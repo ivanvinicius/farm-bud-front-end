@@ -12,9 +12,8 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.div`
-  width: 40%;
-  height: 85%;
-  padding: 2rem 0;
+  width: 33%;
+  height: 83%;
 
   display: flex;
   align-items: center;
@@ -46,8 +45,9 @@ export const Card = styled.div`
   /* acima de 1369px aplicar regra */
   @media (min-width: 1369px) {
     & {
-      width: 30%;
-      height: 75%;
+      width: 27%;
+      height: 65%;
+      padding: 2rem 0;
     }
   }
 `;
