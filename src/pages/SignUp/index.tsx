@@ -11,21 +11,35 @@ import Button from '../../components/Button';
 
 import { Container, Card, Adress, SelectBlock } from './styles';
 
-interface IResponseStateProps {
+import ISelectOptionProps from '../../dtos/ISelectOptionProps';
+
+interface IResponseData {
   id: string;
   name: string;
 }
 
+interface IProviderData {
+  city_id: string;
+  name: string;
+  email: string;
+  password: string;
+}
+
+type IState = ISelectOptionProps;
+type ICity = ISelectOptionProps;
+type IStateResponse = IResponseData;
+type ICityResponse = IResponseData;
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
+  const [states, setStates] = useState<IState[]>();
+  const [cities, setCities] = useState<ICity[]>();
 
   useEffect(() => {
     api.get('/states').then((response) => {
-      const formatedStates: any = [];
+      const formatedStates: IState[] = [];
 
-      response.data.map(({ id, name }: IResponseStateProps) => {
+      response.data.map(({ id, name }: IStateResponse) => {
         return formatedStates.push({ value: id, label: name });
       });
 
@@ -33,33 +47,24 @@ const SignUp: React.FC = () => {
     });
   }, []);
 
-  const handleFindCityByState = useCallback((data: any) => {
-    api
-      .get('/adresses', {
-        params: {
-          state_id: data.value,
-        },
-      })
-      .then((response) => {
-        const formatedCities: any = [];
+  const handleFindCityByState = useCallback(async ({ value }: any) => {
+    const formatedCities: ICity[] = [];
 
-        response.data.map(({ id, city }: any) => {
-          return formatedCities.push({ value: id, label: city });
-        });
-
-        setCities(formatedCities);
-      });
-  }, []);
-
-  const handleSubmitForm = useCallback(async (data: any) => {
-    const response = await api.post('/providers', {
-      adress_id: data.cities,
-      name: data.name,
-      email: data.email,
-      password: data.password,
+    const response = await api.get('/adresses', {
+      params: {
+        state_id: value,
+      },
     });
 
-    console.log(response);
+    response.data.map(({ id, name }: ICityResponse) => {
+      return formatedCities.push({ value: id, label: name });
+    });
+
+    setCities(formatedCities);
+  }, []);
+
+  const handleSubmitForm = useCallback(async (data: IProviderData) => {
+    await api.post('/providers', data);
   }, []);
 
   return (
@@ -84,8 +89,7 @@ const SignUp: React.FC = () => {
             <SelectBlock>
               <label>Estados</label>
               <Select
-                id="states"
-                name="states"
+                name="state"
                 options={states}
                 isClearable
                 placeholder="Selecione"
@@ -96,8 +100,7 @@ const SignUp: React.FC = () => {
             <SelectBlock>
               <label>Cidades</label>
               <Select
-                id="cities"
-                name="cities"
+                name="city"
                 options={cities}
                 isClearable
                 placeholder="Selecione"
