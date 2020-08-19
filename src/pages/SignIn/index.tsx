@@ -2,8 +2,11 @@ import React, { useRef, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
+import getValidationErrors from '../../utils/getValidationErrors';
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -18,19 +21,42 @@ interface ISignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
+  const { addToast } = useToast();
   const history = useHistory();
 
   const handleSubmit = useCallback(
-    async ({ email, password }: ISignInFormData): Promise<Number | void> => {
+    async ({ email, password }: ISignInFormData) => {
       try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          email: Yup.string().email().required('E-mail obrigatório'),
+          password: Yup.string().min(6, 'No mínimo 6 digitos'),
+        });
+
+        await schema.validate({ email, password }, { abortEarly: false });
+
         await signIn({ email, password });
 
-        return history.push('/');
+        history.push('/');
       } catch (err) {
-        return 3 + 1;
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description:
+            'Ocorreu um erro ao fazer o login, cheque as credenciais',
+        });
       }
     },
-    [signIn, history],
+    [signIn, addToast, history],
   );
 
   return (

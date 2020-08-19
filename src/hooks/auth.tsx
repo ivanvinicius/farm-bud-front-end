@@ -20,7 +20,7 @@ interface IContextData {
 
 const AuthContext = createContext<IContextData>({} as IContextData);
 
-export const AuthProvider: React.FC = ({ children }) => {
+const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('@FarmBud:token');
     const user = localStorage.getItem('@FarmBud:user');
@@ -57,7 +57,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useAuth = (): IContextData => {
+const useAuth = (): IContextData => {
   const context = useContext(AuthContext);
 
   if (!context) {
@@ -66,3 +66,5 @@ export const useAuth = (): IContextData => {
 
   return context;
 };
+
+export { AuthProvider, useAuth };

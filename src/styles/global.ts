@@ -22,6 +22,10 @@ export default createGlobalStyle`
     --color-box-base: #FFFFFF;
     --color-box-footer: #FAFAFC;
 
+    --color-toast-info: #3498DB;
+    --color-toast-success: #07BC0C;
+    --color-toast-error: #E74C3C;
+
     font-size: 60%;
   }
 

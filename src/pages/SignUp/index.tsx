@@ -44,7 +44,7 @@ const SignUp: React.FC = () => {
 
   /* eslint-disable-next-line */
   const handleFindCityByState = useCallback(async (data: any): Promise<
-    React.SetStateAction<ISelectOption | void>
+    React.SetStateAction<ISelectOption[] | void>
   > => {
     if (!data) {
       return setCities([]);
@@ -90,13 +90,11 @@ const SignUp: React.FC = () => {
           />
           <Adress>
             <SelectBlock>
-              <label>Estados</label>
+              <label>Estadoss</label>
               <Select
                 name="state"
                 options={states}
                 placeholder="Selecione"
-                isClearable
-                isSearchable
                 onChange={handleFindCityByState}
               />
             </SelectBlock>
@@ -106,8 +104,6 @@ const SignUp: React.FC = () => {
               <Select
                 name="city"
                 options={cities}
-                isClearable
-                isSearchable
                 placeholder="Selecione"
                 noOptionsMessage={() => 'Primeiro selecione o UF'}
               />
