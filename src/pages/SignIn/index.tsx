@@ -27,11 +27,11 @@ const SignIn: React.FC = () => {
   const handleSubmit = useCallback(
     async ({ email, password }: ISignInFormData) => {
       try {
-        formRef.current?.setErrors({});
-
         const schema = Yup.object().shape({
-          email: Yup.string().email().required('E-mail obrigatório'),
-          password: Yup.string().min(6, 'No mínimo 6 digitos'),
+          email: Yup.string()
+            .email('O e-mail deve ser válido')
+            .required('E-mail é obrigatório'),
+          password: Yup.string().min(6, 'A senha deve ter mínimo 6 digitos'),
         });
 
         await schema.validate({ email, password }, { abortEarly: false });
@@ -43,7 +43,11 @@ const SignIn: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
-          formRef.current?.setErrors(errors);
+          addToast({
+            type: 'error',
+            title: 'Validação de formulário',
+            description: String(errors.undefined),
+          });
 
           return;
         }
