@@ -43,4 +43,9 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
   );
 };
 
+Select.defaultProps = {
+  isSearchable: false,
+  isClearable: false,
+};
+
 export default Select;

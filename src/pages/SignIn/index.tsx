@@ -27,6 +27,8 @@ const SignIn: React.FC = () => {
   const handleSubmit = useCallback(
     async ({ email, password }: ISignInFormData) => {
       try {
+        formRef.current?.setErrors({});
+
         const schema = Yup.object().shape({
           email: Yup.string()
             .email('O e-mail deve ser válido')
@@ -43,11 +45,7 @@ const SignIn: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
-          addToast({
-            type: 'error',
-            title: 'Validação de formulário',
-            description: String(errors.undefined),
-          });
+          formRef.current?.setErrors(errors);
 
           return;
         }

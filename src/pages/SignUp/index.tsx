@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 import api from '../../services/api';
+import { useToast } from '../../hooks/toast';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
 import Select from '../../components/Select';
@@ -18,8 +21,8 @@ interface IResponseAPI {
   name: string;
 }
 
-interface IProvider {
-  city_id: string;
+interface ISingUpFormData {
+  city: string;
   name: string;
   email: string;
   password: string;
@@ -27,6 +30,8 @@ interface IProvider {
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const { addToast } = useToast();
+  const history = useHistory();
   const [states, setStates] = useState<ISelectOption[]>();
   const [cities, setCities] = useState<ISelectOption[]>();
 
@@ -66,9 +71,59 @@ const SignUp: React.FC = () => {
     return setCities(formatedCities);
   }, []);
 
-  const handleSubmitForm = useCallback(async (data: IProvider) => {
-    await api.post('/providers', data);
-  }, []);
+  const handleSubmitForm = useCallback(
+    async ({ city, name, email, password }: ISingUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          city: Yup.string().required('Você deve selecionar uma cidade.'),
+          name: Yup.string().required('O nome é obrigatório.'),
+          email: Yup.string().email('O e-mail deve ser válido'),
+          password: Yup.string().min(
+            6,
+            'A senha deve conter pelo menos 6 digitos.',
+          ),
+        });
+
+        await schema.validate(
+          { city, name, email, password },
+          { abortEarly: false },
+        );
+
+        await api.post('/providers', {
+          city_id: city,
+          name,
+          email,
+          password,
+        });
+
+        addToast({
+          type: 'success',
+          title: 'Cadastro realizado',
+          description: 'O cadastro foi realizado com sucesso',
+        });
+
+        history.push('/signin');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro no cadastro',
+          description:
+            'Ocorreu um erro ao realizar o cadastro, cheque as informações',
+        });
+      }
+    },
+    [formRef, addToast, history],
+  );
 
   return (
     <Container>
