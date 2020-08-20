@@ -16,8 +16,7 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
       name: fieldName,
       ref: selectRef.current,
 
-      /* eslint-disable-next-line */
-      getValue: (ref: any) => {
+      getValue: (ref: any) => { // eslint-disable-line
         if (rest.isMulti) {
           if (!ref.state.value) {
             return [];

@@ -47,12 +47,13 @@ const SignUp: React.FC = () => {
     });
   }, []);
 
-  /* eslint-disable-next-line */
-  const handleFindCityByState = useCallback(async (data: any): Promise<
-    React.SetStateAction<ISelectOption[] | void>
-  > => {
+  const handleFindCityByState = useCallback(async (data: any) => { // eslint-disable-line
+    const selectRef = formRef.current?.getFieldRef('city');
+
+    selectRef.select.clearValue();
+
     if (!data) {
-      return setCities([]);
+      setCities([]);
     }
 
     const { value } = data;
@@ -68,7 +69,7 @@ const SignUp: React.FC = () => {
       return formatedCities.push({ value: id, label: name });
     });
 
-    return setCities(formatedCities);
+    setCities(formatedCities);
   }, []);
 
   const handleSubmitForm = useCallback(

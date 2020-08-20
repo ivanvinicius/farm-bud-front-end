@@ -1,12 +1,10 @@
-/* eslint-disable */
-
 const customStyles = {
-  option: (provided: any, state: any) => ({
+  option: (provided: any, state: any) => ({ // eslint-disable-line
     ...provided,
     color: state.isSelected ? 'white' : 'black',
     backgroundColor: state.isSelected ? '#8257E5' : 'white',
   }),
-  control: (provided: any) => ({
+  control: (provided: any) => ({ // eslint-disable-line
     ...provided,
     fontSize: '1.6rem',
     fontFamily: 'Archivo',
