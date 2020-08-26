@@ -13,15 +13,17 @@ export const Container = styled.button`
   border-radius: 0.8rem;
   text-decoration: none;
   font: 700 1.6rem Archivo;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
   cursor: pointer;
 
   color: var(--color-button-text);
-  background: var(--color-secundary);
-  box-shadow: 0 0.3rem 0.2rem 0 rgba(0, 0, 0, 0.2);
+  background: var(--color-orange);
+  box-shadow: 0 0.6rem 0.6rem 0 rgba(0, 0, 0, 0.2);
 
   transition: background 0.3s;
 
   &:hover {
-    background: var(--color-secundary-dark);
+    background: var(--color-orange-dark);
   }
 `;

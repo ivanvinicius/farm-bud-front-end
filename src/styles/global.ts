@@ -1,30 +1,23 @@
 import { createGlobalStyle } from 'styled-components';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default createGlobalStyle`
   :root {
+    --color-white: #FFFF;
     --color-black: #000;
-    --color-background: #F0F0F7;
-    --color-primary-lighter: #9871F5;
-    --color-primary-light: #916BEA;
-    --color-primary: #8257E5;
-    --color-primary-dark: #774DD6;
-    --color-primary-darker: #6842C2;
-    --color-secundary: #04D361;
-    --color-secundary-dark: #04BF58;
-    --color-title-in-primary: #FFFFFF;
-    --color-text-in-primary: #D4C2FF;
-    --color-text-title: #32264D;
-    --color-text-complement: #9C98A6;
-    --color-text-base: #6A6180;
-    --color-line-in-white: #E6E6F0;
-    --color-input-background: #F8F8FC;
-    --color-button-text: #FFFFFF;
-    --color-box-base: #FFFFFF;
-    --color-box-footer: #FAFAFC;
 
-    --color-toast-info: #3498DB;
-    --color-toast-success: #07BC0C;
-    --color-toast-error: #E74C3C;
+    --color-background: #F0F0F7;       /* background */
+    --color-text-complement: #9C98A6;  /* placeholder */
+    --color-text-base: #6A6180;        /* label */
+    --color-line-in-white: #E6E6F0;    /* input border */
+    --color-input-background: #F8F8FC; /* input background */
+    --color-button-text: #FFFFFF;      /* input text */
+
+    --color-gray-header: #383838;
+    --color-purple: #7620D8;
+    --color-purple-dark: #5506B0;
+    --color-orange: #DE5431;
+    --color-orange-dark: #C53E1E;
 
     font-size: 60%;
   }
@@ -61,4 +54,10 @@ export default createGlobalStyle`
     width: 90vw;
     max-width: 70rem;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'MuseoModerno', cursive;
+    font-weight: 400;
+  }
+
 `;

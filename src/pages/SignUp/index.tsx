@@ -3,9 +3,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 import api from '../../services/api';
-import { useToast } from '../../hooks/toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
@@ -30,7 +30,6 @@ interface ISingUpFormData {
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { addToast } = useToast();
   const history = useHistory();
   const [states, setStates] = useState<ISelectOption[]>();
   const [cities, setCities] = useState<ISelectOption[]>();
@@ -99,11 +98,7 @@ const SignUp: React.FC = () => {
           password,
         });
 
-        addToast({
-          type: 'success',
-          title: 'Cadastro realizado',
-          description: 'O cadastro foi realizado com sucesso',
-        });
+        toast.success('Cadastro realizado com sucesso.');
 
         history.push('/signin');
       } catch (err) {
@@ -111,25 +106,20 @@ const SignUp: React.FC = () => {
           const errors = getValidationErrors(err);
 
           formRef.current?.setErrors(errors);
-
-          return;
         }
 
-        addToast({
-          type: 'error',
-          title: 'Erro no cadastro',
-          description:
-            'Ocorreu um erro ao realizar o cadastro, cheque as informações',
-        });
+        toast.error(
+          'Não foi possível realizar o cadastro, tente novamente mais tarde.',
+        );
       }
     },
-    [formRef, addToast, history],
+    [formRef, history],
   );
 
   return (
     <Container>
       <Card>
-        <h2>Dados do cadastro</h2>
+        <h2>Fazer Cadastro</h2>
 
         <Form ref={formRef} onSubmit={handleSubmitForm}>
           <Input
@@ -146,7 +136,7 @@ const SignUp: React.FC = () => {
           />
           <Adress>
             <SelectBlock>
-              <label>Estadoss</label>
+              <label>Estados</label>
               <Select
                 name="state"
                 options={states}
@@ -169,7 +159,7 @@ const SignUp: React.FC = () => {
           <Button type="submit">Cadastrar</Button>
         </Form>
 
-        <Link to="/signin">Voltar a tela de login</Link>
+        <Link to="/signin">Voltar ao Login</Link>
       </Card>
     </Container>
   );

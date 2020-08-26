@@ -6,11 +6,11 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
-  padding: 2rem 10rem;
+  padding: 1rem 15rem;
 
-  background: var(--color-primary);
+  background: var(--color-gray-header);
 `;
 
 export const Menu = styled.div`
@@ -23,7 +23,7 @@ export const Menu = styled.div`
     margin: 0 1rem;
 
     text-decoration: none;
-    color: var(--color-text-in-primary);
+    color: var(--color-white);
     transition: opacity 0.2s;
 
     &:hover {
@@ -32,8 +32,13 @@ export const Menu = styled.div`
   }
 
   div {
-    img {
-      height: 3rem;
+    svg {
+      color: var(--color-white);
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--color-orange);
+      }
     }
   }
 `;
@@ -43,13 +48,13 @@ export const SignOutArea = styled.div`
     height: 3rem;
     border: 0;
     background: transparent;
-    color: var(--color-text-in-primary);
+    color: var(--color-white);
     cursor: pointer;
 
     transition: color 0.2s;
 
     &:hover {
-      color: var(--color-toast-error);
+      color: var(--color-orange-dark);
     }
   }
 `;

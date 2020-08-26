@@ -9,7 +9,7 @@ const customStyles = {
     fontSize: '1.6rem',
     fontFamily: 'Archivo',
     alignItems: 'center',
-    backgroundColor: '#F8F8FC',
+    backgroundColor: '#FFFF',
     borderColor: '#E6E6F0',
     borderRadius: '0.8rem',
     borderStyle: 'solid',

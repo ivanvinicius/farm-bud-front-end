@@ -3,10 +3,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import { SiGumtree } from 'react-icons/si';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 import { useAuth } from '../../hooks/auth';
-import { useToast } from '../../hooks/toast';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -21,7 +22,6 @@ interface ISignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
-  const { addToast } = useToast();
   const history = useHistory();
 
   const handleSubmit = useCallback(
@@ -46,25 +46,22 @@ const SignIn: React.FC = () => {
           const errors = getValidationErrors(err);
 
           formRef.current?.setErrors(errors);
-
-          return;
         }
 
-        addToast({
-          type: 'error',
-          title: 'Erro na autenticação',
-          description:
-            'Ocorreu um erro ao fazer o login, cheque as credenciais',
-        });
+        toast.error('Não foi possível fazer login, cheche suas credenciais.');
       }
     },
-    [signIn, addToast, history],
+    [signIn, history],
   );
 
   return (
     <Container>
       <Card>
-        <h1>Farm Bud</h1>
+        <div>
+          <h1>Fa</h1>
+          <SiGumtree size={31} />
+          <h1>m Bud</h1>
+        </div>
 
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input label="E-mail" name="email" placeholder="Digite seu e-mail" />
@@ -78,7 +75,7 @@ const SignIn: React.FC = () => {
           <Button type="submit">Entrar</Button>
         </Form>
 
-        <Link to="/signup">Criar uma nova conta</Link>
+        <Link to="/signup">Criar Conta</Link>
       </Card>
     </Container>
   );

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import backgroundImg from '../../assets/images/background-img.jpg';
+
 export const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -8,7 +10,9 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  background: var(--color-primary);
+  background-image: url(${backgroundImg});
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 export const Card = styled.div`
@@ -22,7 +26,24 @@ export const Card = styled.div`
 
   background: var(--color-background);
   border-radius: 0.8rem;
-  box-shadow: 0 0.6rem 0.3rem 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0.6rem 0.6rem 0.6rem rgba(0, 0, 0, 0.3);
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+      font-family: 'MuseoModerno', cursive;
+      font-weight: 400;
+      letter-spacing: -0.1rem;
+    }
+
+    > svg {
+      margin-top: -0.6rem;
+      color: var(--color-orange);
+    }
+  }
 
   form {
     width: 80%;
@@ -35,10 +56,10 @@ export const Card = styled.div`
 
   a {
     text-decoration: none;
-    color: var(--color-primary-darker);
+    color: var(--color-purple);
 
     &:hover {
-      color: var(--color-primary);
+      color: var(--color-purple-dark);
     }
   }
 

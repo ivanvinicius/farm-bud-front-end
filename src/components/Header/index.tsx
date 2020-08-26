@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { IoIosArrowRoundBack } from 'react-icons/io';
 
 import { useAuth } from '../../hooks/auth';
-
-import backIcon from '../../assets/icons/back.svg';
 
 import { Container, Menu, SignOutArea } from './styles';
 
@@ -22,7 +21,7 @@ const Header: React.FC = () => {
       <Menu>
         <div>
           <Link to="/">
-            <img src={backIcon} alt="Voltar" />
+            <IoIosArrowRoundBack size={31} />
           </Link>
         </div>
 
