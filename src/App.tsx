@@ -12,7 +12,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes />
       </BrowserRouter>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={5000} />
       <GlobalStyles />
     </AppProvider>
   );

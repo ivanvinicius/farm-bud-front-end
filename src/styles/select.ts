@@ -1,20 +1,14 @@
 const customStyles = {
-  option: (provided: any, state: any) => ({ // eslint-disable-line
+  option: (provided: any, state: any) => ({
     ...provided,
     color: state.isSelected ? 'white' : 'black',
     backgroundColor: state.isSelected ? '#DE5431' : 'white',
   }),
-  control: (provided: any) => ({ // eslint-disable-line
+  control: (provided: any) => ({
     ...provided,
     boxShadow: null,
 
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
-    marginTop: '0.2rem',
     minHeight: '5.7rem',
-    height: '5.7rem',
 
     fontSize: '1.7rem',
     fontFamily: 'Archivo',

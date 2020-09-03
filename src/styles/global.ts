@@ -50,14 +50,8 @@ export default createGlobalStyle`
     color: var(--color-text-base)
   }
 
-  .container {
-    width: 90vw;
-    max-width: 70rem;
-  }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: 'MuseoModerno', cursive;
     font-weight: 400;
   }
-
 `;

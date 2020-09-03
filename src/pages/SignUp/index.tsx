@@ -128,7 +128,7 @@ const SignUp: React.FC = () => {
             type="text"
             icon={RiBuilding2Line}
             name="name"
-            placeholder="Nome da empresa"
+            placeholder="Nome da Empresa"
           />
           <Input type="email" icon={FiMail} name="email" placeholder="Email" />
           <Input
@@ -142,7 +142,7 @@ const SignUp: React.FC = () => {
             <Select
               name="state"
               options={states}
-              placeholder="Estados"
+              placeholder="Estado"
               onChange={handleFindCityByState}
               noOptionsMessage={() => 'Não foi encontrado UF'}
             />
@@ -150,7 +150,7 @@ const SignUp: React.FC = () => {
             <Select
               name="city"
               options={cities}
-              placeholder="Cidades"
+              placeholder="Cidade"
               noOptionsMessage={() => 'Primeiro selecione o UF'}
             />
           </AdressGroup>
