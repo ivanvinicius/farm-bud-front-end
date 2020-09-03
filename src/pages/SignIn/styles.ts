@@ -37,9 +37,11 @@ export const Card = styled.div`
       font-family: 'MuseoModerno', cursive;
       font-weight: 400;
       letter-spacing: -0.1rem;
+      font-size: 5rem;
     }
 
     > svg {
+      font-size: 4rem;
       margin-top: -0.6rem;
       color: var(--color-orange);
     }
@@ -66,9 +68,8 @@ export const Card = styled.div`
   /* acima de 1369px aplicar regra */
   @media (min-width: 1369px) {
     & {
-      width: 27%;
-      height: 65%;
-      padding: 2rem 0;
+      width: 25%;
+      height: 60%;
     }
   }
 `;

@@ -5,6 +5,7 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { SiGumtree } from 'react-icons/si';
+import { FiMail, FiLock } from 'react-icons/fi';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 import { useAuth } from '../../hooks/auth';
@@ -59,17 +60,17 @@ const SignIn: React.FC = () => {
       <Card>
         <div>
           <h1>Fa</h1>
-          <SiGumtree size={31} />
+          <SiGumtree />
           <h1>m Bud</h1>
         </div>
 
         <Form ref={formRef} onSubmit={handleSubmit}>
-          <Input label="E-mail" name="email" placeholder="Digite seu e-mail" />
+          <Input type="email" name="email" icon={FiMail} placeholder="Email" />
           <Input
             type="password"
-            label="Senha"
             name="password"
-            placeholder="Digite sua senha"
+            icon={FiLock}
+            placeholder="Senha"
           />
 
           <Button type="submit">Entrar</Button>

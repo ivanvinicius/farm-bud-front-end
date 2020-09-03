@@ -4,6 +4,8 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { RiBuilding2Line } from 'react-icons/ri';
+import { FiMail, FiLock } from 'react-icons/fi';
 
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -12,7 +14,7 @@ import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 
-import { Container, Card, Adress, SelectBlock } from './styles';
+import { Container, Card, AdressGroup } from './styles';
 
 import ISelectOption from '../../dtos/ISelectOption';
 
@@ -123,38 +125,35 @@ const SignUp: React.FC = () => {
 
         <Form ref={formRef} onSubmit={handleSubmitForm}>
           <Input
-            label="Nome"
+            type="text"
+            icon={RiBuilding2Line}
             name="name"
-            placeholder="Digite o nome da empresa"
+            placeholder="Nome da empresa"
           />
-          <Input label="E-mail" name="email" placeholder="Digite o e-mail" />
+          <Input type="email" icon={FiMail} name="email" placeholder="Email" />
           <Input
             type="password"
-            label="Senha"
+            icon={FiLock}
             name="password"
-            placeholder="Digite a senha"
+            placeholder="Senha"
           />
-          <Adress>
-            <SelectBlock>
-              <label>Estados</label>
-              <Select
-                name="state"
-                options={states}
-                placeholder="Selecione"
-                onChange={handleFindCityByState}
-              />
-            </SelectBlock>
 
-            <SelectBlock>
-              <label>Cidades</label>
-              <Select
-                name="city"
-                options={cities}
-                placeholder="Selecione"
-                noOptionsMessage={() => 'Primeiro selecione o UF'}
-              />
-            </SelectBlock>
-          </Adress>
+          <AdressGroup>
+            <Select
+              name="state"
+              options={states}
+              placeholder="Estados"
+              onChange={handleFindCityByState}
+              noOptionsMessage={() => 'Não foi encontrado UF'}
+            />
+
+            <Select
+              name="city"
+              options={cities}
+              placeholder="Cidades"
+              noOptionsMessage={() => 'Primeiro selecione o UF'}
+            />
+          </AdressGroup>
 
           <Button type="submit">Cadastrar</Button>
         </Form>

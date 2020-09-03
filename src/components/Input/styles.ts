@@ -1,42 +1,52 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface IContainerProps {
+  isFocused: boolean;
+  isFilled: boolean;
+}
+
+export const Container = styled.div<IContainerProps>`
+  display: flex;
+  align-items: center;
+
   width: 100%;
-  position: relative;
+  padding: 1.6rem;
 
-  & + & {
-    margin-top: 1.5rem;
-  }
+  background: var(--color-white);
+  color: var(--color-text-complement);
 
-  label {
-    font-size: 1.4rem;
-  }
+  border-radius: 0.8rem;
+  border: 0.1rem solid;
+  border-color: var(--color-line-in-white);
+
+  ${(props) =>
+    props.isFocused &&
+    css`
+      border-color: var(--color-orange);
+      color: var(--color-orange-dark);
+    `}
+
+  ${(props) =>
+    props.isFilled &&
+    css`
+      color: var(--color-orange-dark);
+    `}
 
   input {
-    width: 100%;
-    height: 5.6rem;
-    margin-top: 0.8rem;
-    border-radius: 0.8rem;
-    background: var(--color-white);
-    border: 0.1rem solid var(--color-line-in-white);
-    outline: 0;
-    padding: 0 1.6rem;
-    font: 1.6rem Archivo;
+    flex: 1;
+    border: 0;
+    background: transparent;
 
     &::placeholder {
       color: var(--color-text-complement);
     }
   }
 
-  &:focus-within::after {
-    content: '';
+  svg {
+    margin-right: 1.6rem;
+  }
 
-    width: calc(100% - 3.2rem);
-    height: 2px;
-    background: var(--color-purple);
-    position: absolute;
-    left: 1.6rem;
-    right: 1.6rem;
-    bottom: 0;
+  & + & {
+    margin-top: 1.6rem;
   }
 `;
