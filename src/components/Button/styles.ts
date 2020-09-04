@@ -18,12 +18,12 @@ export const Container = styled.button`
   cursor: pointer;
 
   color: var(--color-button-text);
-  background: var(--color-orange);
+  background: var(--color-purple);
   box-shadow: 0 0.6rem 0.6rem 0 rgba(0, 0, 0, 0.2);
 
   transition: background 0.3s;
 
   &:hover {
-    background: var(--color-orange-dark);
+    background: var(--color-purple-dark);
   }
 `;

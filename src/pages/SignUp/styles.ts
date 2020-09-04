@@ -46,10 +46,10 @@ export const Card = styled.div`
   a {
     margin-top: 3rem;
     text-decoration: none;
-    color: var(--color-purple);
+    color: var(--color-orange);
 
     &:hover {
-      color: var(--color-purple-dark);
+      color: var(--color-orange-dark);
     }
   }
 `;

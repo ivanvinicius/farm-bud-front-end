@@ -7,7 +7,7 @@ interface ITooltipProps {
   className?: string;
 }
 
-const Tooltip: React.FC<ITooltipProps> = ({ children, title, className }) => {
+const Tooltip: React.FC<ITooltipProps> = ({ title, className, children }) => {
   return (
     <Container className={className}>
       {children}

@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 interface IContainerProps {
   isFocused: boolean;
   isFilled: boolean;
+  hasError: boolean;
 }
 
 export const Container = styled.div<IContainerProps>`
@@ -20,16 +21,22 @@ export const Container = styled.div<IContainerProps>`
   border-color: var(--color-line-in-white);
 
   ${(props) =>
+    props.hasError &&
+    css`
+      color: var(--color-orange);
+    `}
+
+  ${(props) =>
     props.isFocused &&
     css`
-      border-color: var(--color-orange);
-      color: var(--color-orange-dark);
+      border-color: var(--color-purple);
+      color: var(--color-purple);
     `}
 
   ${(props) =>
     props.isFilled &&
     css`
-      color: var(--color-orange-dark);
+      color: var(--color-purple);
     `}
 
   input {

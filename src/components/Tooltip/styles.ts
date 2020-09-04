@@ -3,38 +3,48 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
 
+  height: 2rem;
+  margin-left: 1.6rem;
+
   span {
+    position: absolute;
+
     width: 16rem;
-    background: #ff9000;
     padding: 0.8rem;
-    border-radius: 0.8rem;
+    bottom: calc(100% + 1.2rem);
+
+    background: var(--color-orange);
+    color: var(--color-white);
+
+    border-radius: 0.4rem;
     font-size: 1.4rem;
     font-weight: 500;
-    color: #312e38;
-    opacity: 0;
-    transition: opacity 0.4s;
-    visibility: hidden;
+    text-align: center;
 
-    position: absolute;
-    bottom: calc(100 + 0.6rem);
     left: 50%;
     transform: translateX(-50%);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s;
 
     &::before {
       content: '';
 
-      border-style: solid;
-      border-color: #ff9000 transparent;
-      border-width: 0.6rem 0.6rem 0 0.6rem;
-      top: 100%;
       position: absolute;
+
+      top: 100%;
       left: 50%;
-      transform: translate(-50%);
+      transform: translateX(-50%);
+
+      border-style: solid;
+      border-color: var(--color-orange) transparent;
+      border-width: 0.6rem 0.6rem 0 0.6rem;
     }
   }
 
   &:hover span {
-    opacity: 1;
+    opacity: 0.8;
     visibility: visible;
   }
 `;

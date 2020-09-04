@@ -31,10 +31,8 @@ const SignIn: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          email: Yup.string()
-            .email('O e-mail deve ser válido')
-            .required('E-mail é obrigatório'),
-          password: Yup.string().min(6, 'A senha deve ter mínimo 6 digitos'),
+          email: Yup.string().email().required('Informe o email'),
+          password: Yup.string().min(6, 'No mínimo 6 digitos'),
         });
 
         await schema.validate({ email, password }, { abortEarly: false });
@@ -47,9 +45,11 @@ const SignIn: React.FC = () => {
           const errors = getValidationErrors(err);
 
           formRef.current?.setErrors(errors);
+
+          return;
         }
 
-        toast.error('Não foi possível fazer login, cheche suas credenciais.');
+        toast.error('Cheche suas credenciais.');
       }
     },
     [signIn, history],

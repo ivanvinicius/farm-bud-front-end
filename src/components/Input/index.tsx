@@ -7,6 +7,9 @@ import React, {
 } from 'react';
 import { useField } from '@unform/core';
 import { IconBaseProps } from 'react-icons';
+import { RiErrorWarningLine } from 'react-icons/ri';
+
+import Tooltip from '../Tooltip';
 
 import { Container } from './styles';
 
@@ -17,7 +20,7 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { fieldName, defaultValue, registerField } = useField(name);
+  const { fieldName, defaultValue, error, registerField } = useField(name);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
@@ -39,7 +42,7 @@ const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
   }, []);
 
   return (
-    <Container isFocused={isFocused} isFilled={isFilled}>
+    <Container hasError={!!error} isFocused={isFocused} isFilled={isFilled}>
       {Icon && <Icon size={20} />}
       <input
         ref={inputRef}
@@ -48,6 +51,11 @@ const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
         defaultValue={defaultValue}
         {...rest}
       />
+      {error && (
+        <Tooltip title={error}>
+          <RiErrorWarningLine size={20} />
+        </Tooltip>
+      )}
     </Container>
   );
 };

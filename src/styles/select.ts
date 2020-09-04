@@ -2,7 +2,7 @@ const customStyles = {
   option: (provided: any, state: any) => ({
     ...provided,
     color: state.isSelected ? 'white' : 'black',
-    backgroundColor: state.isSelected ? '#DE5431' : 'white',
+    backgroundColor: state.isSelected ? '#5506B0' : 'white',
   }),
   control: (provided: any) => ({
     ...provided,
@@ -23,7 +23,7 @@ const customStyles = {
     },
 
     '&:focus-within': {
-      borderColor: '#DE5431',
+      borderColor: '#7620D8',
     },
   }),
 };

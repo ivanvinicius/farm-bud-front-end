@@ -24,10 +24,11 @@ interface IResponseAPI {
 }
 
 interface ISingUpFormData {
-  city: string;
   name: string;
   email: string;
   password: string;
+  state: string;
+  city: string;
 }
 
 const SignUp: React.FC = () => {
@@ -74,22 +75,20 @@ const SignUp: React.FC = () => {
   }, []);
 
   const handleSubmitForm = useCallback(
-    async ({ city, name, email, password }: ISingUpFormData) => {
+    async ({ name, email, password, state, city }: ISingUpFormData) => {
       try {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          city: Yup.string().required('Você deve selecionar uma cidade.'),
-          name: Yup.string().required('O nome é obrigatório.'),
-          email: Yup.string().email('O e-mail deve ser válido'),
-          password: Yup.string().min(
-            6,
-            'A senha deve conter pelo menos 6 digitos.',
-          ),
+          name: Yup.string().required('Informe o nome.'),
+          email: Yup.string().email().required('Informe o email'),
+          password: Yup.string().min(6, 'No mínimo 6 digitos.'),
+          state: Yup.string().required('Informe o estado.'),
+          city: Yup.string().required('Informe a cidade.'),
         });
 
         await schema.validate(
-          { city, name, email, password },
+          { name, email, password, state, city },
           { abortEarly: false },
         );
 
@@ -100,22 +99,22 @@ const SignUp: React.FC = () => {
           password,
         });
 
-        toast.success('Cadastro realizado com sucesso.');
+        toast.success('Cadastro realizado.');
 
         history.push('/signin');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
+          const formatedErrrors = getValidationErrors(err);
 
-          formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(formatedErrrors);
+
+          return;
         }
 
-        toast.error(
-          'Não foi possível realizar o cadastro, tente novamente mais tarde.',
-        );
+        toast.error('Não foi possível realizar o cadastro.');
       }
     },
-    [formRef, history],
+    [history],
   );
 
   return (
