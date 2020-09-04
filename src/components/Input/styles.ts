@@ -24,6 +24,7 @@ export const Container = styled.div<IContainerProps>`
     props.hasError &&
     css`
       color: var(--color-orange);
+      border-color: var(--color-orange);
     `}
 
   ${(props) =>
