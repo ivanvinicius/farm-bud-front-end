@@ -11,40 +11,40 @@ export const Container = styled.div`
   padding: 1rem 15rem;
 
   background: var(--color-gray-header);
-`;
 
-export const Menu = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: stretch;
-
-  a {
-    height: 3rem;
-    margin: 0 1rem;
+  > a {
+    display: flex;
+    align-items: center;
 
     text-decoration: none;
+    cursor: pointer;
     color: var(--color-white);
-    transition: opacity 0.2s;
+    transition: color 0.2s;
 
     &:hover {
-      opacity: 0.6;
+      color: var(--color-line-in-white);
+    }
+
+    svg {
+      margin-right: 10px;
     }
   }
+`;
 
-  div {
-    svg {
-      color: var(--color-white);
-      transition: color 0.2s;
+export const UserName = styled.p`
+  font-size: 20px;
+  color: var(--color-white);
 
-      &:hover {
-        color: var(--color-orange);
-      }
-    }
+  &:hover {
+    color: var(--color-line-in-white);
   }
 `;
 
 export const SignOutArea = styled.div`
   button {
+    display: flex;
+    align-items: center;
+
     height: 3rem;
     border: 0;
     background: transparent;
@@ -54,7 +54,11 @@ export const SignOutArea = styled.div`
     transition: color 0.2s;
 
     &:hover {
-      color: var(--color-orange-dark);
+      color: var(--color-orange);
+    }
+
+    svg {
+      margin-left: 10px;
     }
   }
 `;

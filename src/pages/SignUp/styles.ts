@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import backgroundImg from '../../assets/images/background-img.jpg';
-
 export const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -10,17 +8,12 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  background-image: url(${backgroundImg});
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: var(--color-line-in-white);
 `;
 
 export const Card = styled.div`
-  min-width: 470px;
-  min-height: 550px;
-
-  width: 27%;
-  height: 60%;
+  width: 530px;
+  height: 600px;
 
   display: flex;
   align-items: center;
@@ -28,11 +21,11 @@ export const Card = styled.div`
   justify-content: space-evenly;
 
   border-radius: 0.8rem;
-  background-color: var(--color-background);
-  box-shadow: 0.6rem 0.6rem 0.6rem rgba(0, 0, 0, 0.3);
+  background-color: var(--color-white);
+  box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
 
   form {
-    width: 92%;
+    width: 90%;
 
     display: flex;
     flex-direction: column;
@@ -54,7 +47,7 @@ export const Card = styled.div`
   }
 `;
 
-export const AdressGroup = styled.div`
+export const AddressGroup = styled.div`
   margin-top: 1.5rem;
 
   display: grid;

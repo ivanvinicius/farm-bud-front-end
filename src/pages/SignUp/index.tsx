@@ -14,7 +14,7 @@ import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 
-import { Container, Card, AdressGroup } from './styles';
+import { Container, Card, AddressGroup } from './styles';
 
 import ISelectOption from '../../dtos/ISelectOption';
 
@@ -59,7 +59,7 @@ const SignUp: React.FC = () => {
     }
 
     const { value } = data;
-    const formatedCities: ISelectOption[] = [];
+    const formattedCities: ISelectOption[] = [];
 
     const response = await api.get('/cities', {
       params: {
@@ -68,10 +68,10 @@ const SignUp: React.FC = () => {
     });
 
     response.data.map(({ id, name }: IResponseAPI) => {
-      return formatedCities.push({ value: id, label: name });
+      return formattedCities.push({ value: id, label: name });
     });
 
-    setCities(formatedCities);
+    setCities(formattedCities);
   }, []);
 
   const handleSubmitForm = useCallback(
@@ -104,9 +104,9 @@ const SignUp: React.FC = () => {
         history.push('/signin');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
-          const formatedErrrors = getValidationErrors(err);
+          const formattedErrors = getValidationErrors(err);
 
-          formRef.current?.setErrors(formatedErrrors);
+          formRef.current?.setErrors(formattedErrors);
 
           return;
         }
@@ -137,7 +137,7 @@ const SignUp: React.FC = () => {
             placeholder="Senha"
           />
 
-          <AdressGroup>
+          <AddressGroup>
             <Select
               name="state"
               options={states}
@@ -152,7 +152,7 @@ const SignUp: React.FC = () => {
               placeholder="Cidade"
               noOptionsMessage={() => 'Primeiro selecione o UF'}
             />
-          </AdressGroup>
+          </AddressGroup>
 
           <Button type="submit">Cadastrar</Button>
         </Form>

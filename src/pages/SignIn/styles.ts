@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import backgroundImg from '../../assets/images/background-img.jpg';
-
 export const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -10,26 +8,21 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  background-image: url(${backgroundImg});
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: var(--color-line-in-white);
 `;
 
 export const Card = styled.div`
-  min-width: 470px;
-  min-height: 550px;
-
-  width: 27%;
-  height: 60%;
+  width: 470px;
+  height: 600px;
 
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   flex-direction: column;
 
-  background: var(--color-background);
+  background: var(--color-white);
   border-radius: 0.8rem;
-  box-shadow: 0.6rem 0.6rem 0.6rem rgba(0, 0, 0, 0.3);
+  box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
 
   > div {
     display: flex;
@@ -51,7 +44,7 @@ export const Card = styled.div`
   }
 
   form {
-    width: 92%;
+    width: 90%;
 
     display: flex;
     align-items: center;

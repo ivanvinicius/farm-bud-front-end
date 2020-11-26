@@ -1,38 +1,38 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { IoIosArrowRoundBack } from 'react-icons/io';
+import { IoIosArrowRoundBack, IoIosLogOut } from 'react-icons/io';
 
 import { useAuth } from '../../hooks/auth';
 
-import { Container, Menu, SignOutArea } from './styles';
+import { Container, SignOutArea, UserName } from './styles';
 
-const Header: React.FC = () => {
-  const { signOut } = useAuth();
+interface IHeaderProps {
+  urlBack?: string;
+}
+
+const Header: React.FC<IHeaderProps> = ({ urlBack = '/' }) => {
+  const { signOut, user } = useAuth();
   const history = useHistory();
 
   const handleSignOut = useCallback(async () => {
-    await signOut();
+    signOut();
 
-    history.push('/');
+    history.push('/signin');
   }, [signOut, history]);
 
   return (
     <Container>
-      <Menu>
-        <div>
-          <Link to="/">
-            <IoIosArrowRoundBack size={31} />
-          </Link>
-        </div>
+      <Link to={urlBack}>
+        <IoIosArrowRoundBack size={31} />
+        Voltar
+      </Link>
 
-        <Link to="/">Produtos</Link>
-
-        <Link to="/">Composições</Link>
-      </Menu>
+      <UserName>{user.name}</UserName>
 
       <SignOutArea>
         <button type="button" onClick={handleSignOut}>
           Sair
+          <IoIosLogOut size={31} />
         </button>
       </SignOutArea>
     </Container>
