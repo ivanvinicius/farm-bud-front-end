@@ -14,12 +14,12 @@ const Dashboard: React.FC = () => {
       <Content>
         <Title>Produtos</Title>
         <Section>
-          <Link to="products">
+          <Link to="products-measures">
             <IoIosList size={70} />
-            <span>Listar</span>
+            <span>Listar meus produtos</span>
           </Link>
 
-          <Link to="add-product">
+          <Link to="products">
             <IoIosAdd size={70} />
             <span>Criar</span>
           </Link>

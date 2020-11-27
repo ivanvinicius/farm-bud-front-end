@@ -9,7 +9,7 @@ export const Container = styled.div`
 
 export const Content = styled.div``;
 
-export const Table = styled.div`
+export const Table = styled.table`
   display: table;
   width: 100%;
   max-width: 1280px;
@@ -21,11 +21,6 @@ export const Table = styled.div`
   overflow: hidden;
   background-color: var(--color-white);
   transition: all 0.3s;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
 
   th,
   td {

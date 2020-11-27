@@ -8,6 +8,7 @@ import SignUp from '../pages/SignUp';
 
 import Dashboard from '../pages/Dashboard';
 import Products from '../pages/Products';
+import CreateProductMeasure from '../pages/CreateProductMeasure';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -15,7 +16,12 @@ const Routes: React.FC = () => (
     <Route path="/signup" component={SignUp} />
 
     <Route path="/" exact component={Dashboard} isPrivate />
-    <Route path="/products" exact component={Products} isPrivate />
+    <Route path="/products" component={Products} isPrivate />
+    <Route
+      path="/create-product-measure"
+      component={CreateProductMeasure}
+      isPrivate
+    />
   </Switch>
 );
 
