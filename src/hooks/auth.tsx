@@ -32,6 +32,8 @@ const AuthProvider: React.FC = ({ children }) => {
     const user = localStorage.getItem('@FarmBud:user');
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
       return { token, user: JSON.parse(user) };
     }
 
@@ -42,6 +44,8 @@ const AuthProvider: React.FC = ({ children }) => {
     const response = await api.post('sessions', { email, password });
 
     const { token, user } = response.data;
+
+    api.defaults.headers.authorization = `Bearer ${token}`;
 
     localStorage.setItem('@FarmBud:token', token);
     localStorage.setItem('@FarmBud:user', JSON.stringify(user));
