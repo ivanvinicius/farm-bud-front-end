@@ -39,13 +39,13 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     api.get('/states').then((response) => {
-      const formatedStates: ISelectOption[] = [];
+      const formattedStates: ISelectOption[] = [];
 
       response.data.map(({ id, name }: IResponseAPI) => {
-        return formatedStates.push({ value: id, label: name });
+        return formattedStates.push({ value: id, label: name });
       });
 
-      setStates(formatedStates);
+      setStates(formattedStates);
     });
   }, []);
 
