@@ -26,7 +26,7 @@ const Products: React.FC = () => {
     });
   }, []);
 
-  const navigateToProductDetail = useCallback(
+  const navigateToCreateProductMeasure = useCallback(
     (product: IProductsProps) => {
       return history.push(`create-product-measure`, { product });
     },
@@ -52,7 +52,7 @@ const Products: React.FC = () => {
             {products.map((product) => (
               <tr
                 key={product.id}
-                onClick={() => navigateToProductDetail(product)}
+                onClick={() => navigateToCreateProductMeasure(product)}
               >
                 <td>{product.name}</td>
                 <td>{product.brand.name}</td>

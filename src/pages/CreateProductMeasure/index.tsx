@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import {} from 'react-icons/fi';
 
 import api from '../../services/api';
 import Header from '../../components/Header';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Select from '../../components/Select';
+import CurrencyInput from '../../components/CurrencyInput';
 import IProductsProps from '../../dtos/IProductsProps';
 import ISelectOption from '../../dtos/ISelectOption';
 
@@ -41,8 +41,7 @@ const CreateProductMeasure: React.FC = () => {
     });
   }, []);
 
-  const handleFormSubmit = useCallback(async (data: any) => {
-    console.log(data);
+  const handleFormSubmit = useCallback(async (data: any) => { //eslint-disable-line
     return 2 + 2;
   }, []);
 
@@ -51,7 +50,7 @@ const CreateProductMeasure: React.FC = () => {
       <Header urlBack="/products" />
 
       <Content>
-        <h2>Cadastro de produto</h2>
+        <h2>Cadastro de produtos na empresa</h2>
         <Form
           ref={formRef}
           initialData={{
@@ -73,7 +72,6 @@ const CreateProductMeasure: React.FC = () => {
               <Input name="brand" disabled placeholder="Marca" />
             </div>
           </InfoRow>
-
           <CategoryRow>
             <div>
               <label htmlFor="">Categoria</label>
@@ -90,7 +88,6 @@ const CreateProductMeasure: React.FC = () => {
               <Input name="composition" disabled placeholder="Composição" />
             </div>
           </CategoryRow>
-
           <VolumeRow>
             <div>
               <label htmlFor="">Volume</label>
@@ -111,6 +108,17 @@ const CreateProductMeasure: React.FC = () => {
               <Input name="price" placeholder="R$ 10,00" />
             </div>
           </VolumeRow>
+
+          <CurrencyInput
+            name="coin"
+            placeholder="R$ 10,00"
+            prefix="R$ "
+            decimalSeparator=","
+            groupSeparator="."
+            allowDecimals
+            decimalsLimit={2}
+            onChange={(value, name) => console.log(value, name)}
+          />
 
           <Button type="submit">Cadastrar</Button>
         </Form>
