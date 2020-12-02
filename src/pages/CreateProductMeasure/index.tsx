@@ -105,20 +105,17 @@ const CreateProductMeasure: React.FC = () => {
             </div>
             <div>
               <label htmlFor="">Valor</label>
-              <Input name="price" placeholder="R$ 10,00" />
+              <CurrencyInput
+                name="price"
+                placeholder="R$ 10,00"
+                prefix="R$ "
+                decimalSeparator=","
+                groupSeparator="."
+                allowDecimals
+                decimalsLimit={2}
+              />
             </div>
           </VolumeRow>
-
-          <CurrencyInput
-            name="coin"
-            placeholder="R$ 10,00"
-            prefix="R$ "
-            decimalSeparator=","
-            groupSeparator="."
-            allowDecimals
-            decimalsLimit={2}
-            onChange={(value, name) => console.log(value, name)}
-          />
 
           <Button type="submit">Cadastrar</Button>
         </Form>
