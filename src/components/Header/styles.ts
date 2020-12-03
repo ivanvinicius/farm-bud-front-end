@@ -6,9 +6,9 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  width: 100vw;
+  width: 100%;
   margin: 0 auto;
-  padding: 1rem 15rem;
+  padding: 10px 150px;
 
   background: var(--color-gray-header);
 
@@ -45,7 +45,7 @@ export const SignOutArea = styled.div`
     display: flex;
     align-items: center;
 
-    height: 3rem;
+    height: 30px;
     border: 0;
     background: transparent;
     color: var(--color-white);

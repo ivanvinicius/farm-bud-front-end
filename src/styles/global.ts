@@ -29,24 +29,12 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
-  html, body, #root {
-    width: 100vw;
-    height: 100vh;
-  }
-
   body {
-    background: var(--color-background);
-    -webkit-font-smoothing: antialiased !important;
-  }
-
-  #root{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--color-line-in-white);
   }
 
   body, input, button, textarea {
-    font: 500 1.6rem Poppins;
+    font: 500 16px Poppins;
     color: var(--color-text-base)
   }
 

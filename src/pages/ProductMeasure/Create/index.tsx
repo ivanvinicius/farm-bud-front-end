@@ -5,17 +5,17 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
-import api from '../../services/api';
-import formatToNumeric from '../../utils/formatToNumeric';
-import getValidationErrors from '../../utils/getValidationErrors';
-import Header from '../../components/Header';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import Select from '../../components/Select';
-import CurrencyInput from '../../components/CurrencyInput';
-import VolumetricInput from '../../components/VolumetricInput';
-import IProductsProps from '../../dtos/IProductsProps';
-import ISelectOption from '../../dtos/ISelectOption';
+import api from '../../../services/api';
+import formatToNumeric from '../../../utils/formatToNumeric';
+import getValidationErrors from '../../../utils/getValidationErrors';
+import Header from '../../../components/Header';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import Select from '../../../components/Select';
+import CurrencyInput from '../../../components/CurrencyInput';
+import VolumetricInput from '../../../components/VolumetricInput';
+import IProductsProps from '../../../dtos/IProductsProps';
+import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 

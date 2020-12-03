@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import { useHistory } from 'react-router-dom';
 
-import Header from '../../components/Header';
 import api from '../../services/api';
+import Header from '../../components/Header';
+import Table from '../../components/Table';
 import IProductsProps from '../../dtos/IProductsProps';
 
-import { Container, Content, Table } from './styles';
+import { Container } from './styles';
 
 const Products: React.FC = () => {
   const history = useHistory();
@@ -37,33 +37,31 @@ const Products: React.FC = () => {
     <Container>
       <Header />
 
-      <Content>
-        <Table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Marca</th>
-              <th>Categoria</th>
-              <th>Subcategoria</th>
-              <th>Composição</th>
+      <Table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Marca</th>
+            <th>Categoria</th>
+            <th>Subcategoria</th>
+            <th>Composição</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr
+              key={product.id}
+              onClick={() => navigateToCreateProductMeasure(product)}
+            >
+              <td>{product.name}</td>
+              <td>{product.brand.name}</td>
+              <td>{product.subcategory.category.name}</td>
+              <td>{product.subcategory.name}</td>
+              <td>{product.formattedComposition}</td>
             </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr
-                key={product.id}
-                onClick={() => navigateToCreateProductMeasure(product)}
-              >
-                <td>{product.name}</td>
-                <td>{product.brand.name}</td>
-                <td>{product.subcategory.category.name}</td>
-                <td>{product.subcategory.name}</td>
-                <td>{product.formattedComposition}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Content>
+          ))}
+        </tbody>
+      </Table>
     </Container>
   );
 };

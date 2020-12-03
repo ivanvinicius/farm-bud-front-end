@@ -6,7 +6,7 @@ interface IContainerProps {
 }
 
 export const Container = styled.div<IContainerProps>`
-  border: 0.1rem solid;
+  border: 1px solid;
   border-color: var(--color-line-in-white);
   border-radius: 0.8rem;
 
