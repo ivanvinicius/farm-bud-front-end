@@ -31,7 +31,6 @@ export const Content = styled.div`
     label {
       color: var(--color-text-complement);
       font-size: 15px;
-      margin-bottom: 51px;
     }
   }
 `;
