@@ -22,7 +22,7 @@ export const Container = styled.div`
     transition: color 0.2s;
 
     &:hover {
-      color: var(--color-line-in-white);
+      color: var(--color-orange);
     }
 
     svg {
@@ -31,8 +31,8 @@ export const Container = styled.div`
   }
 `;
 
-export const UserName = styled.p`
-  font-size: 20px;
+export const Title = styled.span`
+  font-size: 16px;
   color: var(--color-white);
 
   &:hover {

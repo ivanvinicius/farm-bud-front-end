@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import api from '../../services/api';
-import Header from '../../components/Header';
-import Table from '../../components/Table';
-import IProductsProps from '../../dtos/IProductsProps';
+import api from '../../../services/api';
+import Header from '../../../components/Header';
+import Table from '../../../components/Table';
+import IProductsProps from '../../../dtos/IProductsProps';
 
 import { Container } from './styles';
 
-const Products: React.FC = () => {
+const ListProducts: React.FC = () => {
   const history = useHistory();
   const [products, setProducts] = useState<IProductsProps[]>([]);
 
@@ -35,7 +35,7 @@ const Products: React.FC = () => {
 
   return (
     <Container>
-      <Header />
+      <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
 
       <Table>
         <thead>
@@ -66,4 +66,4 @@ const Products: React.FC = () => {
   );
 };
 
-export default Products;
+export default ListProducts;

@@ -98,10 +98,9 @@ const CreateProductMeasure: React.FC = () => {
 
   return (
     <Container>
-      <Header urlBack="/products" />
+      <Header urlBack="/products" headerTitle="Finalize o Cadastro" />
 
       <Content>
-        <h2>Cadastro de produtos na empresa</h2>
         <Form
           ref={formRef}
           initialData={{

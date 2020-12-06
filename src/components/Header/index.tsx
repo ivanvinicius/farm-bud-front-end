@@ -1,16 +1,21 @@
 import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { IoIosArrowRoundBack, IoIosLogOut } from 'react-icons/io';
+
+import { FiArrowLeft, FiPower } from 'react-icons/fi';
 
 import { useAuth } from '../../hooks/auth';
 
-import { Container, SignOutArea, UserName } from './styles';
+import { Container, SignOutArea, Title } from './styles';
 
 interface IHeaderProps {
   urlBack?: string;
+  headerTitle?: string;
 }
 
-const Header: React.FC<IHeaderProps> = ({ urlBack = '/' }) => {
+const Header: React.FC<IHeaderProps> = ({
+  urlBack = '/',
+  headerTitle = '',
+}) => {
   const { signOut, user } = useAuth();
   const history = useHistory();
 
@@ -23,16 +28,18 @@ const Header: React.FC<IHeaderProps> = ({ urlBack = '/' }) => {
   return (
     <Container>
       <Link to={urlBack}>
-        <IoIosArrowRoundBack size={31} />
-        Voltar
+        <FiArrowLeft size={22} />
       </Link>
 
-      <UserName>{user.name}</UserName>
+      {headerTitle.length > 0 ? (
+        <Title>{headerTitle}</Title>
+      ) : (
+        <Title>{user.name}</Title>
+      )}
 
       <SignOutArea>
         <button type="button" onClick={handleSignOut}>
-          Sair
-          <IoIosLogOut size={31} />
+          <FiPower size={20} />
         </button>
       </SignOutArea>
     </Container>

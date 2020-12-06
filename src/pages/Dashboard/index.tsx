@@ -1,43 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IoIosList, IoIosAdd } from 'react-icons/io';
+import { FaBoxes } from 'react-icons/fa';
+import { GiCorkedTube } from 'react-icons/gi';
 
 import Header from '../../components/Header';
 
-import { Container, Content, Title, Section } from './styles';
+import { Container, Menu, Info } from './styles';
 
 const Dashboard: React.FC = () => {
   return (
     <Container>
       <Header />
 
-      <Content>
-        <Title>Produtos</Title>
-        <Section>
-          <Link to="products-measures">
-            <IoIosList size={70} />
-            <span>Listar meus produtos</span>
-          </Link>
+      <Menu>
+        <Link to="/products-menu">
+          <FaBoxes size={100} />
+          <Info>
+            <strong>Produtos</strong>
+            <span>
+              Cadastre, liste e altere os produtos deste estabelecimento.
+            </span>
+          </Info>
+        </Link>
 
-          <Link to="products">
-            <IoIosAdd size={70} />
-            <span>Criar</span>
-          </Link>
-        </Section>
-
-        <Title>Composições</Title>
-        <Section>
-          <Link to="compositions">
-            <IoIosList size={70} />
-            <span>Listar</span>
-          </Link>
-
-          <Link to="add-composition">
-            <IoIosAdd size={70} />
-            <span>Criar</span>
-          </Link>
-        </Section>
-      </Content>
+        <Link to="/compositions-menu">
+          <GiCorkedTube size={100} />
+          <Info>
+            <strong>Composições</strong>
+            <span>
+              Cadastre, liste e altere as composições deste estabelecimento
+            </span>
+          </Info>
+        </Link>
+      </Menu>
     </Container>
   );
 };
