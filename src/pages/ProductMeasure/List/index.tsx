@@ -1,22 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import api from '../../../services/api';
-import formatToCurrency from '../../../utils/formatToCurrency';
+import formatToDecimalBRL from '../../../utils/formatToDecimalBRL';
+import formatToCurrencyBRL from '../../../utils/formatToCurrencyBRL';
 import IProductMeasureProps from '../../../dtos/IProductMeasureProps';
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
 
 import { Container } from './styles';
 
+interface IFormattedProductMeasureProps extends IProductMeasureProps {
+  formattedVolume?: string;
+  formattedPrice?: string;
+}
+
 const ListProductMeasure: React.FC = () => {
+  const history = useHistory();
   const [productsMeasures, setProductsMeasures] = useState<
-    IProductMeasureProps[]
+    IFormattedProductMeasureProps[]
   >([]);
 
+  const navigateToUpdateProductMeasure = useCallback(
+    async (productMeasure: IFormattedProductMeasureProps) => {
+      return history.push('update-product-measure', { productMeasure });
+    },
+    [history],
+  );
+
   useEffect(() => {
-    api
-      .get('/products-measures')
-      .then((response) => setProductsMeasures(response.data));
+    api.get('/products-measures').then((response) => {
+      const formattedProducts = response.data.map(
+        (item: IProductMeasureProps) => ({
+          ...item,
+          formattedVolume: formatToDecimalBRL(item.volume),
+          formattedPrice: formatToCurrencyBRL(item.price),
+          formattedComposition:
+            item.product.composition === null
+              ? 'Não contém'
+              : item.product.composition,
+        }),
+      );
+
+      setProductsMeasures(formattedProducts);
+    });
   }, []);
 
   return (
@@ -36,16 +63,16 @@ const ListProductMeasure: React.FC = () => {
         </thead>
         <tbody>
           {productsMeasures.map((item) => (
-            <tr key={item.id}>
+            <tr
+              key={item.id}
+              onClick={() => navigateToUpdateProductMeasure(item)}
+            >
               <td>{item.product.name}</td>
               <td>{item.product.subcategory.category.name}</td>
               <td>{item.product.brand.name}</td>
-              <td>
-                {item.volume}
-                {item.measure.name}
-              </td>
-              <td>{formatToCurrency(item.price)}</td>
-              <td>{item.product.composition}</td>
+              <td>{`${item.formattedVolume} ${item.measure.name}`}</td>
+              <td>{`R$${item.formattedPrice}`}</td>
+              <td>{item.formattedComposition}</td>
             </tr>
           ))}
         </tbody>

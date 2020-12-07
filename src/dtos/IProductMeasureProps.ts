@@ -5,6 +5,10 @@ export default interface IProductMeasureProps {
   measure_id: string;
   volume: string;
   price: string;
+  formattedVolume?: string;
+  formattedPrice?: string;
+  formattedComposition?: string;
+
   product: {
     id: string;
     subcategory_id: string;
@@ -25,6 +29,7 @@ export default interface IProductMeasureProps {
       name: string;
     };
   };
+
   measure: {
     id: string;
     name: string;

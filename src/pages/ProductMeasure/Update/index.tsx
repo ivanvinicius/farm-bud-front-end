@@ -4,24 +4,32 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { FaTrash } from 'react-icons/fa';
 
 import api from '../../../services/api';
-import formatToNumeric from '../../../utils/formatToNumeric';
 import getValidationErrors from '../../../utils/getValidationErrors';
+import formatToNumeric from '../../../utils/formatToNumeric';
 import Header from '../../../components/Header';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Select from '../../../components/Select';
 import CurrencyInput from '../../../components/CurrencyInput';
 import VolumetricInput from '../../../components/VolumetricInput';
-import IProductsProps from '../../../dtos/IProductsProps';
+import IProductMeasureProps from '../../../dtos/IProductMeasureProps';
 import IMeasureProps from '../../../dtos/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
 
-import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
+import {
+  Container,
+  Content,
+  InfoRow,
+  CategoryRow,
+  VolumeRow,
+  TrashArea,
+} from './styles';
 
 interface ILocationProps {
-  product: IProductsProps;
+  productMeasure: IProductMeasureProps;
 }
 
 interface IFormSubmitProps {
@@ -31,7 +39,7 @@ interface IFormSubmitProps {
 }
 
 const CreateProductMeasure: React.FC = () => {
-  const { product } = useLocation().state as ILocationProps;
+  const { productMeasure } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
   const [measures, setMeasures] = useState<ISelectOption[]>([]);
@@ -49,7 +57,7 @@ const CreateProductMeasure: React.FC = () => {
   }, []);
 
   const handleFormSubmit = useCallback(
-    async ({ measure, volume, price }: IFormSubmitProps) => {
+    async ({ volume, measure, price }: IFormSubmitProps) => {
       try {
         formRef.current?.setErrors({});
 
@@ -65,15 +73,16 @@ const CreateProductMeasure: React.FC = () => {
         );
 
         const formattedData = {
-          product_id: product.id,
+          id: productMeasure.id,
+          product_id: productMeasure.product_id,
           measure_id: measure,
           volume: formatToNumeric(volume),
           price: formatToNumeric(price),
         };
 
-        await api.post('/products-measures', formattedData);
+        await api.patch('/products-measures', formattedData);
 
-        toast.success('Cadastro realizado.');
+        toast.success('Atualização realizada.');
 
         history.push('/');
       } catch (err) {
@@ -85,28 +94,39 @@ const CreateProductMeasure: React.FC = () => {
           return;
         }
 
-        toast.error('Não foi possível realizar o cadastro.');
+        toast.error('Não foi possível atualizar as informações.');
       }
     },
-    [history, product],
+    [productMeasure, history],
   );
 
   return (
     <Container>
-      <Header urlBack="/products" headerTitle="Finalize o Cadastro" />
+      <Header
+        urlBack="/products-measures"
+        headerTitle="Atualizar Informações"
+      />
 
       <Content>
         <Form
           ref={formRef}
-          initialData={{
-            name: product.name,
-            brand: product.brand.name,
-            category: product.subcategory.category.name,
-            subcategory: product.subcategory.name,
-            composition: product.formattedComposition,
-          }}
           onSubmit={handleFormSubmit}
+          initialData={{
+            name: productMeasure.product.name,
+            brand: productMeasure.product.brand.name,
+            category: productMeasure.product.subcategory.category.name,
+            subcategory: productMeasure.product.subcategory.name,
+            composition: productMeasure.formattedComposition,
+            volume: productMeasure.formattedVolume,
+            price: productMeasure.formattedPrice,
+          }}
         >
+          <TrashArea>
+            <button type="button" onClick={() => 2 + 2}>
+              Apagar o Produto
+              <FaTrash size={16} />
+            </button>
+          </TrashArea>
           <InfoRow>
             <div>
               <label>Nome</label>
@@ -152,6 +172,10 @@ const CreateProductMeasure: React.FC = () => {
                 name="measure"
                 options={measures}
                 placeholder="Selecione"
+                defaultValue={{
+                  value: productMeasure.measure.id,
+                  label: productMeasure.measure.name,
+                }}
               />
             </div>
             <div>
@@ -168,7 +192,7 @@ const CreateProductMeasure: React.FC = () => {
             </div>
           </VolumeRow>
 
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit">Atualizar</Button>
         </Form>
       </Content>
     </Container>

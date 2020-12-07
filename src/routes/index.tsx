@@ -9,6 +9,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import ListProduct from '../pages/Product/List';
 import CreateProductMeasure from '../pages/ProductMeasure/Create';
+import UpdateProductMeasure from '../pages/ProductMeasure/Update';
 import ListProductMeasure from '../pages/ProductMeasure/List';
 import ProductMenu from '../pages/ProductMenu';
 import CompositionMenu from '../pages/CompositionMenu';
@@ -27,6 +28,11 @@ const Routes: React.FC = () => (
     <Route
       path="/create-product-measure"
       component={CreateProductMeasure}
+      isPrivate
+    />
+    <Route
+      path="/update-product-measure"
+      component={UpdateProductMeasure}
       isPrivate
     />
     <Route path="/products-measures" component={ListProductMeasure} isPrivate />

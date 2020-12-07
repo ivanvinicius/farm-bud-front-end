@@ -56,6 +56,7 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
         isSearchable={false}
         onInputChange={handleInputChange}
         classNamePrefix="react-select"
+        noOptionsMessage={() => 'Sem opções'}
         {...rest}
       />
     </Container>
