@@ -1,5 +1,39 @@
 import styled from 'styled-components';
 
+export const ModalContent = styled.div`
+  width: 500px;
+  height: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 50px;
+    text-align: center;
+
+    button {
+      border: 0;
+      background: transparent;
+      color: var(--color-purple);
+      transition: all 0.2s;
+
+      & + button {
+        margin-left: 56px;
+      }
+
+      &:hover {
+        color: var(--color-orange);
+      }
+    }
+  }
+`;
+
 export const Container = styled.div``;
 
 export const Content = styled.div`
@@ -66,7 +100,7 @@ export const TrashArea = styled.div`
 
     border: 0;
     background: transparent;
-    color: var(--color-purple);
+    color: var(--color-orange);
     transition: all 0.2s;
 
     svg {
@@ -74,7 +108,7 @@ export const TrashArea = styled.div`
     }
 
     &:hover {
-      color: var(--color-orange);
+      color: var(--color-orange-dark);
     }
   }
 `;

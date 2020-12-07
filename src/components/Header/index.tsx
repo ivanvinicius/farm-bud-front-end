@@ -1,11 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-
 import { FiArrowLeft, FiPower } from 'react-icons/fi';
 
 import { useAuth } from '../../hooks/auth';
+import Modal from '../Modal';
 
-import { Container, SignOutArea, Title } from './styles';
+import {
+  ModalContent,
+  Container,
+  HeaderContent,
+  BackLinkArea,
+  Title,
+  SignOutArea,
+} from './styles';
 
 interface IHeaderProps {
   urlBack?: string;
@@ -18,6 +25,11 @@ const Header: React.FC<IHeaderProps> = ({
 }) => {
   const { signOut, user } = useAuth();
   const history = useHistory();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const handleToggleModal = useCallback(() => {
+    setModalIsOpen((state) => !state);
+  }, []);
 
   const handleSignOut = useCallback(async () => {
     signOut();
@@ -26,23 +38,44 @@ const Header: React.FC<IHeaderProps> = ({
   }, [signOut, history]);
 
   return (
-    <Container>
-      <Link to={urlBack}>
-        <FiArrowLeft size={22} />
-      </Link>
+    <>
+      <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
+        <ModalContent>
+          <span>Você tem certeza que deseja sair?</span>
 
-      {headerTitle.length > 0 ? (
-        <Title>{headerTitle}</Title>
-      ) : (
-        <Title>{user.name}</Title>
-      )}
+          <div>
+            <button type="submit" onClick={handleSignOut}>
+              Sim, sair
+            </button>
+            <button type="submit" onClick={handleToggleModal}>
+              Não, voltar a aplicação
+            </button>
+          </div>
+        </ModalContent>
+      </Modal>
 
-      <SignOutArea>
-        <button type="button" onClick={handleSignOut}>
-          <FiPower size={20} />
-        </button>
-      </SignOutArea>
-    </Container>
+      <Container>
+        <HeaderContent>
+          <BackLinkArea>
+            <Link to={urlBack}>
+              <FiArrowLeft size={22} />
+            </Link>
+          </BackLinkArea>
+
+          {headerTitle.length > 0 ? (
+            <Title>{headerTitle}</Title>
+          ) : (
+            <Title>{user.name}</Title>
+          )}
+
+          <SignOutArea>
+            <button type="button" onClick={handleSignOut}>
+              <FiPower size={20} />
+            </button>
+          </SignOutArea>
+        </HeaderContent>
+      </Container>
+    </>
   );
 };
 

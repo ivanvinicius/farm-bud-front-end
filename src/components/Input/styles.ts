@@ -50,6 +50,10 @@ export const Container = styled.div<IContainerProps>`
     }
   }
 
+  input:disabled {
+    color: #9F8787;
+  }
+
   svg {
     margin-right: 16px;
   }

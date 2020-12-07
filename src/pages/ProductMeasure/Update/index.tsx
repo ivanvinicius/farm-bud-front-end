@@ -15,6 +15,7 @@ import Button from '../../../components/Button';
 import Select from '../../../components/Select';
 import CurrencyInput from '../../../components/CurrencyInput';
 import VolumetricInput from '../../../components/VolumetricInput';
+import Modal from '../../../components/Modal';
 import IProductMeasureProps from '../../../dtos/IProductMeasureProps';
 import IMeasureProps from '../../../dtos/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
@@ -26,6 +27,7 @@ import {
   CategoryRow,
   VolumeRow,
   TrashArea,
+  ModalContent,
 } from './styles';
 
 interface ILocationProps {
@@ -43,18 +45,23 @@ const CreateProductMeasure: React.FC = () => {
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
   const [measures, setMeasures] = useState<ISelectOption[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    const formattedMeasures: ISelectOption[] = [];
-
-    api.get(`/measures/1`).then((response: any) => { //eslint-disable-line
-      response.data.map(({ id, name }: IMeasureProps) => {
-        return formattedMeasures.push({ value: id, label: name });
-      });
-
-      setMeasures(formattedMeasures);
-    });
+  const handleToggleModal = useCallback(() => {
+    setModalIsOpen((state) => !state);
   }, []);
+
+  const handleDeleteProduct = useCallback(() => {
+    try {
+      api.delete(`/products-measures/${productMeasure.id}`);
+
+      toast.success('Produto deletado!');
+
+      history.push('/products-measures');
+    } catch (err) {
+      toast.error('Não foi possível deletar o produto, tente mais tarde');
+    }
+  }, [history, productMeasure.id]);
 
   const handleFormSubmit = useCallback(
     async ({ volume, measure, price }: IFormSubmitProps) => {
@@ -84,7 +91,7 @@ const CreateProductMeasure: React.FC = () => {
 
         toast.success('Atualização realizada.');
 
-        history.push('/');
+        history.push('/products-measures');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const formattedErrors = getValidationErrors(err);
@@ -100,102 +107,135 @@ const CreateProductMeasure: React.FC = () => {
     [productMeasure, history],
   );
 
+  useEffect(() => {
+    const formattedMeasures: ISelectOption[] = [];
+
+    api.get(`/measures/1`).then((response: any) => { //eslint-disable-line
+      response.data.map(({ id, name }: IMeasureProps) => {
+        return formattedMeasures.push({ value: id, label: name });
+      });
+
+      setMeasures(formattedMeasures);
+    });
+  }, []);
+
   return (
-    <Container>
-      <Header
-        urlBack="/products-measures"
-        headerTitle="Atualizar Informações"
-      />
+    <>
+      <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
+        <ModalContent>
+          <span>
+            {'Tem certeza que deseja apagar o produto '}
+            <strong>{`${productMeasure.product.brand.name} ${productMeasure.product.name}`}</strong>
+            {' ?'}
+          </span>
 
-      <Content>
-        <Form
-          ref={formRef}
-          onSubmit={handleFormSubmit}
-          initialData={{
-            name: productMeasure.product.name,
-            brand: productMeasure.product.brand.name,
-            category: productMeasure.product.subcategory.category.name,
-            subcategory: productMeasure.product.subcategory.name,
-            composition: productMeasure.formattedComposition,
-            volume: productMeasure.formattedVolume,
-            price: productMeasure.formattedPrice,
-          }}
-        >
-          <TrashArea>
-            <button type="button" onClick={() => 2 + 2}>
-              Apagar o Produto
-              <FaTrash size={16} />
+          <div>
+            <button type="submit" onClick={handleDeleteProduct}>
+              Apagar
             </button>
-          </TrashArea>
-          <InfoRow>
-            <div>
-              <label>Nome</label>
-              <Input name="name" disabled placeholder="Nome do produto" />
-            </div>
-            <div>
-              <label>Marca</label>
-              <Input name="brand" disabled placeholder="Marca" />
-            </div>
-          </InfoRow>
-          <CategoryRow>
-            <div>
-              <label>Categoria</label>
-              <Input name="category" disabled placeholder="Categoria" />
-            </div>
+            <button type="submit" onClick={handleToggleModal}>
+              Cancelar
+            </button>
+          </div>
+        </ModalContent>
+      </Modal>
 
-            <div>
-              <label>Subcategoria</label>
-              <Input name="subcategory" disabled placeholder="Subcategoria" />
-            </div>
+      <Container>
+        <Header
+          urlBack="/products-measures"
+          headerTitle="Atualizar Informações"
+        />
 
-            <div>
-              <label>Composição</label>
-              <Input name="composition" disabled placeholder="Composição" />
-            </div>
-          </CategoryRow>
-          <VolumeRow>
-            <div>
-              <label>Volume</label>
-              <VolumetricInput
-                name="volume"
-                placeholder="50,00"
-                decimalSeparator=","
-                groupSeparator="."
-                allowDecimals
-                decimalsLimit={2}
-              />
-            </div>
+        <Content>
+          <Form
+            ref={formRef}
+            onSubmit={handleFormSubmit}
+            initialData={{
+              name: productMeasure.product.name,
+              brand: productMeasure.product.brand.name,
+              category: productMeasure.product.subcategory.category.name,
+              subcategory: productMeasure.product.subcategory.name,
+              composition: productMeasure.formattedComposition,
+              volume: productMeasure.formattedVolume,
+              price: productMeasure.formattedPrice,
+            }}
+          >
+            <TrashArea>
+              <button type="button" onClick={handleToggleModal}>
+                Apagar o Produto
+                <FaTrash size={16} />
+              </button>
+            </TrashArea>
+            <InfoRow>
+              <div>
+                <label>Nome</label>
+                <Input name="name" disabled placeholder="Nome do produto" />
+              </div>
+              <div>
+                <label>Marca</label>
+                <Input name="brand" disabled placeholder="Marca" />
+              </div>
+            </InfoRow>
+            <CategoryRow>
+              <div>
+                <label>Categoria</label>
+                <Input name="category" disabled placeholder="Categoria" />
+              </div>
 
-            <div>
-              <label>Unidade de medida</label>
-              <Select
-                name="measure"
-                options={measures}
-                placeholder="Selecione"
-                defaultValue={{
-                  value: productMeasure.measure.id,
-                  label: productMeasure.measure.name,
-                }}
-              />
-            </div>
-            <div>
-              <label>Valor</label>
-              <CurrencyInput
-                name="price"
-                placeholder="R$ 10,00"
-                prefix="R$ "
-                decimalSeparator=","
-                groupSeparator="."
-                allowDecimals
-                decimalsLimit={2}
-              />
-            </div>
-          </VolumeRow>
+              <div>
+                <label>Subcategoria</label>
+                <Input name="subcategory" disabled placeholder="Subcategoria" />
+              </div>
 
-          <Button type="submit">Atualizar</Button>
-        </Form>
-      </Content>
-    </Container>
+              <div>
+                <label>Composição</label>
+                <Input name="composition" disabled placeholder="Composição" />
+              </div>
+            </CategoryRow>
+            <VolumeRow>
+              <div>
+                <label>Volume</label>
+                <VolumetricInput
+                  name="volume"
+                  placeholder="50,00"
+                  decimalSeparator=","
+                  groupSeparator="."
+                  allowDecimals
+                  decimalsLimit={2}
+                />
+              </div>
+
+              <div>
+                <label>Unidade de medida</label>
+                <Select
+                  name="measure"
+                  options={measures}
+                  placeholder="Selecione"
+                  defaultValue={{
+                    value: productMeasure.measure.id,
+                    label: productMeasure.measure.name,
+                  }}
+                />
+              </div>
+              <div>
+                <label>Valor</label>
+                <CurrencyInput
+                  name="price"
+                  placeholder="R$ 10,00"
+                  prefix="R$ "
+                  decimalSeparator=","
+                  groupSeparator="."
+                  allowDecimals
+                  decimalsLimit={2}
+                />
+              </div>
+            </VolumeRow>
+
+            <Button type="submit">Atualizar</Button>
+          </Form>
+        </Content>
+      </Container>
+    </>
   );
 };
 
