@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
-import formatToNumeric from '../../../utils/formatToNumeric';
 import getValidationErrors from '../../../utils/getValidationErrors';
 import Header from '../../../components/Header';
 import Input from '../../../components/Input';
@@ -67,8 +66,8 @@ const CreateProductMeasure: React.FC = () => {
         const formattedData = {
           product_id: product.id,
           measure_id: measure,
-          volume: formatToNumeric(volume),
-          price: formatToNumeric(price),
+          volume,
+          price,
         };
 
         await api.post('/products-measures', formattedData);

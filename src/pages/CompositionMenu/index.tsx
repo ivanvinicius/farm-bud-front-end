@@ -23,7 +23,7 @@ const CompositionMenu: React.FC = () => {
           </Info>
         </Link>
 
-        <Link to="/#">
+        <Link to="/compositions">
           <BsReverseLayoutTextSidebarReverse size={100} />
           <Info>
             <strong>Listar Composições</strong>

@@ -8,7 +8,6 @@ import { FaTrash } from 'react-icons/fa';
 
 import api from '../../../services/api';
 import getValidationErrors from '../../../utils/getValidationErrors';
-import formatToNumeric from '../../../utils/formatToNumeric';
 import Header from '../../../components/Header';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
@@ -83,8 +82,8 @@ const CreateProductMeasure: React.FC = () => {
           id: productMeasure.id,
           product_id: productMeasure.product_id,
           measure_id: measure,
-          volume: formatToNumeric(volume),
-          price: formatToNumeric(price),
+          volume,
+          price,
         };
 
         await api.patch('/products-measures', formattedData);
@@ -156,8 +155,8 @@ const CreateProductMeasure: React.FC = () => {
               category: productMeasure.product.subcategory.category.name,
               subcategory: productMeasure.product.subcategory.name,
               composition: productMeasure.formattedComposition,
-              volume: productMeasure.formattedVolume,
-              price: productMeasure.formattedPrice,
+              volume: productMeasure.volume,
+              price: productMeasure.price,
             }}
           >
             <TrashArea>
@@ -221,11 +220,11 @@ const CreateProductMeasure: React.FC = () => {
                 <label>Valor</label>
                 <CurrencyInput
                   name="price"
-                  placeholder="R$ 10,00"
-                  prefix="R$ "
+                  placeholder="130,00"
                   decimalSeparator=","
                   groupSeparator="."
                   allowDecimals
+                  prefix="R$ "
                   decimalsLimit={2}
                 />
               </div>

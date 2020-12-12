@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import api from '../../../services/api';
-import formatToDecimalBRL from '../../../utils/formatToDecimalBRL';
-import formatToCurrencyBRL from '../../../utils/formatToCurrencyBRL';
+import formatToNumericBRL from '../../../utils/formatToNumericBRL';
 import IProductMeasureProps from '../../../dtos/IProductMeasureProps';
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
@@ -33,8 +32,8 @@ const ListProductMeasure: React.FC = () => {
       const formattedProducts = response.data.map(
         (item: IProductMeasureProps) => ({
           ...item,
-          formattedVolume: formatToDecimalBRL(item.volume),
-          formattedPrice: formatToCurrencyBRL(item.price),
+          formattedVolume: formatToNumericBRL(item.volume),
+          formattedPrice: formatToNumericBRL(item.price),
           formattedComposition:
             item.product.composition === null
               ? 'Não contém'
@@ -71,7 +70,7 @@ const ListProductMeasure: React.FC = () => {
               <td>{item.product.subcategory.category.name}</td>
               <td>{item.product.brand.name}</td>
               <td>{`${item.formattedVolume} ${item.measure.name}`}</td>
-              <td>{`R$${item.formattedPrice}`}</td>
+              <td>{`R$ ${item.formattedPrice}`}</td>
               <td>{item.formattedComposition}</td>
             </tr>
           ))}

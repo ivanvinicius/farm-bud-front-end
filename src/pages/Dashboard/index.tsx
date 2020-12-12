@@ -23,7 +23,8 @@ const Dashboard: React.FC = () => {
           </Info>
         </Link>
 
-        <Link to="/compositions-menu">
+        {/* <Link to="/compositions-menu"> */}
+        <Link to="/#">
           <GiCorkedTube size={100} />
           <Info>
             <strong>Composições</strong>

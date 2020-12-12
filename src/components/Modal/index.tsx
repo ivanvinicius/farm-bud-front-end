@@ -5,7 +5,7 @@ import reactModalCustomStyle from './reactModalCustomStyle';
 
 const Modal: React.FC<Props> = ({ children, ...rest }) => {
   return (
-    <ReactModal style={reactModalCustomStyle} {...rest}>
+    <ReactModal style={reactModalCustomStyle} {...rest} ariaHideApp={false}>
       {children}
     </ReactModal>
   );

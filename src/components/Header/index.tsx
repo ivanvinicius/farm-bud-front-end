@@ -69,7 +69,7 @@ const Header: React.FC<IHeaderProps> = ({
           )}
 
           <SignOutArea>
-            <button type="button" onClick={handleSignOut}>
+            <button type="button" onClick={handleToggleModal}>
               <FiPower size={20} />
             </button>
           </SignOutArea>
