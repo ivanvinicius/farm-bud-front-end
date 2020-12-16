@@ -25,8 +25,8 @@ interface ILocationProps {
 
 interface IFormSubmitProps {
   measure: string;
-  volume: number;
-  price: number;
+  volume: string;
+  price: string;
 }
 
 const CreateProductMeasure: React.FC = () => {
@@ -147,11 +147,7 @@ const CreateProductMeasure: React.FC = () => {
 
             <div>
               <label>Unidade de medida</label>
-              <Select
-                name="measure"
-                options={measures}
-                placeholder="Selecione"
-              />
+              <Select name="measure" options={measures} />
             </div>
             <div>
               <label>Valor</label>

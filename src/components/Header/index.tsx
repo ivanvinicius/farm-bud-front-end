@@ -59,6 +59,7 @@ const Header: React.FC<IHeaderProps> = ({
           <BackLinkArea>
             <Link to={urlBack}>
               <FiArrowLeft size={22} />
+              voltar
             </Link>
           </BackLinkArea>
 
@@ -70,6 +71,7 @@ const Header: React.FC<IHeaderProps> = ({
 
           <SignOutArea>
             <button type="button" onClick={handleToggleModal}>
+              sair
               <FiPower size={20} />
             </button>
           </SignOutArea>
