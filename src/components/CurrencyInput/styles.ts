@@ -43,6 +43,7 @@ export const Container = styled.div<IContainerProps>`
     flex: 1;
     border: 0;
     background: transparent;
+    width: inherit;
 
     &::placeholder {
       color: var(--color-text-complement);
