@@ -7,11 +7,11 @@ import { toast } from 'react-toastify';
 import { SiGumtree } from 'react-icons/si';
 import { FiMail, FiLock } from 'react-icons/fi';
 
-import getValidationErrors from '../../utils/getValidationErrors';
-import { useAuth } from '../../hooks/auth';
+import getValidationErrors from '../../../utils/getValidationErrors';
+import { useAuth } from '../../../hooks/auth';
 
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
 
 import { Container, Card } from './styles';
 

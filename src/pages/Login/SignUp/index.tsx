@@ -7,16 +7,16 @@ import { toast } from 'react-toastify';
 import { RiBuilding2Line } from 'react-icons/ri';
 import { FiMail, FiLock } from 'react-icons/fi';
 
-import api from '../../services/api';
-import getValidationErrors from '../../utils/getValidationErrors';
+import api from '../../../services/api';
+import getValidationErrors from '../../../utils/getValidationErrors';
 
-import Input from '../../components/Input';
-import Select from '../../components/Select';
-import Button from '../../components/Button';
+import Input from '../../../components/Input';
+import Select from '../../../components/Select';
+import Button from '../../../components/Button';
 
 import { Container, Card, AddressGroup } from './styles';
 
-import ISelectOption from '../../dtos/ISelectOption';
+import ISelectOption from '../../../dtos/ISelectOption';
 
 interface IResponseAPI {
   id: string;

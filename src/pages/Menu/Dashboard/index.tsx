@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaBoxes } from 'react-icons/fa';
 import { GiCorkedTube } from 'react-icons/gi';
 
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 
 import { Container, Menu, Info } from './styles';
 

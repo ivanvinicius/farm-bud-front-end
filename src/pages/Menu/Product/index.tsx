@@ -2,33 +2,33 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsPlus, BsReverseLayoutTextSidebarReverse } from 'react-icons/bs';
 
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 
 import { Container, Menu, Info } from './styles';
 
-const CompositionMenu: React.FC = () => {
+const ProductMenu: React.FC = () => {
   return (
     <Container>
-      <Header headerTitle="Menu de Composições" />
+      <Header headerTitle="Menu de Produtos" />
 
       <Menu>
-        <Link to="/#">
+        <Link to="/products">
           <BsPlus size={100} />
           <Info>
-            <strong>Criar Composição</strong>
+            <strong>Criar Produto</strong>
             <span>
-              Para cadastrar uma nova composição, basta selecionar um item na
-              lista e preencher as informações faltantes
+              Para cadastrar um novo produto, basta selecionar um item na lista
+              e preencher as informações faltantes
             </span>
           </Info>
         </Link>
 
-        <Link to="/compositions">
+        <Link to="/products-measures">
           <BsReverseLayoutTextSidebarReverse size={100} />
           <Info>
-            <strong>Listar Composições</strong>
+            <strong>Listar Produtos</strong>
             <span>
-              Liste e altere as composições cadastradas no estabelecimento
+              Liste e altere os produtos cadastrados no estabelecimento
             </span>
           </Info>
         </Link>
@@ -37,4 +37,4 @@ const CompositionMenu: React.FC = () => {
   );
 };
 
-export default CompositionMenu;
+export default ProductMenu;
