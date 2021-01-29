@@ -67,6 +67,7 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({} as IAuthState);
   }, []);
 
+  /* When the token is expired obligate a sign-out action */
   useEffect(() => {
     const interceptor = api.interceptors.response.use(
       (res) => res,

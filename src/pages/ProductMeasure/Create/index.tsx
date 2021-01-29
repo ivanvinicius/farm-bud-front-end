@@ -13,14 +13,14 @@ import Button from '../../../components/Button';
 import Select from '../../../components/Select';
 import CurrencyInput from '../../../components/CurrencyInput';
 import VolumetricInput from '../../../components/VolumetricInput';
-import IProductsProps from '../../../dtos/IProductsProps';
+
 import IMeasureProps from '../../../dtos/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
 interface ILocationProps {
-  product: IProductsProps;
+  product: any;
 }
 
 interface IFormSubmitProps {

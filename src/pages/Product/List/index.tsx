@@ -1,67 +1,103 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Column } from 'react-table';
 
 import api from '../../../services/api';
+
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
-import IProductsProps from '../../../dtos/IProductsProps';
+
+import IProductsProps from '../../../dtos/Product/List/IProductsProps';
 
 import { Container } from './styles';
 
 const ListProducts: React.FC = () => {
-  const history = useHistory();
   const [products, setProducts] = useState<IProductsProps[]>([]);
+
+  const tableColumns = useMemo(
+    (): Column[] => [
+      {
+        Header: 'Produto',
+        columns: [
+          {
+            Header: 'ID',
+            accessor: 'product_id',
+          },
+          {
+            Header: 'Nome',
+            accessor: 'product_name',
+          },
+          {
+            Header: 'Composição',
+            accessor: 'product_composition',
+          },
+        ],
+      },
+      {
+        Header: 'Marca',
+        columns: [
+          {
+            Header: 'ID Marca',
+            accessor: 'brand_id',
+          },
+          {
+            Header: 'Nome',
+            accessor: 'brand_name',
+          },
+        ],
+      },
+      {
+        Header: 'Categoria',
+        columns: [
+          {
+            Header: 'ID Categoria',
+            accessor: 'category_id',
+          },
+          {
+            Header: 'Nome',
+            accessor: 'category_name',
+          },
+          {
+            Header: 'ID Subcategoria',
+            accessor: 'subcategory_id',
+          },
+          {
+            Header: 'Subcategoria',
+            accessor: 'subcategory_name',
+          },
+        ],
+      },
+    ],
+    [],
+  );
+
+  const hideTableColumns = useMemo(
+    () => ['product_id', 'brand_id', 'category_id', 'subcategory_id'],
+    [],
+  );
 
   useEffect(() => {
     api.get('products').then((response) => {
-      const formattedProducts = response.data.map(
-        (product: IProductsProps) => ({
-          ...product,
-          formattedComposition:
-            product.composition === null ? 'Não contém' : product.composition,
-        }),
-      );
+      const formattedProducts = response.data.map((item: IProductsProps) => ({
+        ...item,
+        product_composition: !item.product_composition
+          ? 'Não contém'
+          : item.product_composition,
+      }));
 
       setProducts(formattedProducts);
     });
   }, []);
 
-  const navigateToCreateProductMeasure = useCallback(
-    (product: IProductsProps) => {
-      return history.push(`create-product-measure`, { product });
-    },
-    [history],
-  );
-
   return (
     <Container>
       <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
 
-      <Table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Marca</th>
-            <th>Categoria</th>
-            <th>Subcategoria</th>
-            <th>Composição</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr
-              key={product.id}
-              onClick={() => navigateToCreateProductMeasure(product)}
-            >
-              <td>{product.name}</td>
-              <td>{product.brand.name}</td>
-              <td>{product.subcategory.category.name}</td>
-              <td>{product.subcategory.name}</td>
-              <td>{product.formattedComposition}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <Table
+        data={[...products, ...products, ...products]} // just for test pagination
+        columns={tableColumns}
+        hideColumns={hideTableColumns}
+        useFilter
+      />
     </Container>
   );
 };

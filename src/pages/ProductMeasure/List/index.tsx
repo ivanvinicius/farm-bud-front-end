@@ -49,7 +49,7 @@ const ListProductMeasure: React.FC = () => {
     <Container>
       <Header urlBack="/products-menu" headerTitle="Meus Produtos" />
 
-      <Table>
+      {/* <Table>
         <thead>
           <tr>
             <th>Nome</th>
@@ -75,7 +75,7 @@ const ListProductMeasure: React.FC = () => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table> */}
     </Container>
   );
 };
