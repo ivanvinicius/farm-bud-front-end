@@ -23,17 +23,17 @@ export const Menu = styled.div`
     width: 450px;
     height: 550px;
 
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: var(--color-white);
     color: var(--color-text-base);
     text-decoration: none;
 
-    box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
+    box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.2);
     transition: all 0.2s;
 
     &:hover {
       color: var(--color-purple);
-      box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.2);
+      box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.3);
     }
   }
 `;

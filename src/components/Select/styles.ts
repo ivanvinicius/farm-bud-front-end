@@ -6,9 +6,8 @@ interface IContainerProps {
 }
 
 export const Container = styled.div<IContainerProps>`
-  border: 1px solid;
-  border-color: var(--color-line-in-white);
-  border-radius: 0.8rem;
+  border: 1px solid var(--color-line-in-white);
+  border-radius: 8px;
 
   ${(props) =>
     props.isFilled &&

@@ -18,9 +18,9 @@ export const Card = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
 
-  border-radius: 0.8rem;
-  background-color: var(--color-white);
-  box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
+  background: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.2);
 
   form {
     width: 90%;
@@ -35,7 +35,7 @@ export const Card = styled.div`
   }
 
   a {
-    margin-top: 3rem;
+    margin-top: 30px;
     text-decoration: none;
     color: var(--color-orange);
 
@@ -46,9 +46,9 @@ export const Card = styled.div`
 `;
 
 export const AddressGroup = styled.div`
-  margin-top: 1.5rem;
+  margin-top: 15px;
 
   display: grid;
   grid-template-columns: 2fr 4fr;
-  column-gap: 1.5rem;
+  column-gap: 15px;
 `;

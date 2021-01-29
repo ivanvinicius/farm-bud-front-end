@@ -1,29 +1,22 @@
 import styled, { css } from 'styled-components';
 
 interface IContainerProps {
-  hasError: boolean;
-  isFilled: boolean;
   isFocused: boolean;
+  isFilled: boolean;
 }
 
 export const Container = styled.div<IContainerProps>`
   display: flex;
   align-items: center;
-  width: 100%;
-  padding: 16px;
+
+  width: 30%;
+  padding: 12px;
 
   background: var(--color-white);
   color: var(--color-text-complement);
 
   border-radius: 8px;
   border: 1px solid var(--color-line-in-white);
-
-  ${(props) =>
-    props.hasError &&
-    css`
-      color: var(--color-orange);
-      border-color: var(--color-orange);
-    `}
 
   ${(props) =>
     props.isFocused &&
@@ -51,9 +44,5 @@ export const Container = styled.div<IContainerProps>`
 
   svg {
     margin-right: 16px;
-  }
-
-  & + & {
-    margin-top: 16px;
   }
 `;

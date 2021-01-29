@@ -19,8 +19,8 @@ export const Card = styled.div`
   flex-direction: column;
 
   background: var(--color-white);
-  border-radius: 0.8rem;
-  box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.2);
 
   > div {
     display: flex;
@@ -30,13 +30,13 @@ export const Card = styled.div`
     h1 {
       font-family: 'MuseoModerno', cursive;
       font-weight: 400;
-      letter-spacing: -0.1rem;
-      font-size: 5rem;
+      letter-spacing: -1px;
+      font-size: 50px;
     }
 
     > svg {
-      font-size: 4rem;
-      margin-top: -0.6rem;
+      font-size: 40px;
+      margin-top: -6px;
       color: var(--color-orange);
     }
   }

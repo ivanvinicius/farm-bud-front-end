@@ -12,9 +12,9 @@ export const Content = styled.div`
   justify-content: space-evenly;
   flex-direction: column;
 
-  border-radius: 0.8rem;
+  border-radius: 8px;
   background-color: var(--color-white);
-  box-shadow: 0.6rem 0.6rem 0.9rem rgba(0, 0, 0, 0.1);
+  box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.2);
 
   form {
     display: flex;

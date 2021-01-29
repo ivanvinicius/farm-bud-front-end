@@ -10,11 +10,11 @@ const customSelectStyle: StylesConfig = {
   control: (provided: any) => ({ //eslint-disable-line
     ...provided,
     boxShadow: null,
-    minHeight: '5.7rem',
-    fontSize: '1.7rem',
+    minHeight: '56px',
+    fontSize: '16px',
     fontFamily: 'Archivo',
     borderWidth: 0,
-    borderRadius: '0.8rem',
+    borderRadius: '8px',
   }),
 
   singleValue: (provided) => ({

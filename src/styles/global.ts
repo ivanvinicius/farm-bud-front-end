@@ -19,7 +19,7 @@ export default createGlobalStyle`
     --color-orange: #DE5431;
     --color-orange-dark: #C53E1E;
 
-    font-size: 60%;
+    --color-table-row-even: #DDDDDD;
   }
 
   *{

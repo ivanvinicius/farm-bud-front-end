@@ -12,59 +12,45 @@ import { Container } from './styles';
 
 const ListProducts: React.FC = () => {
   const [products, setProducts] = useState<IProductsProps[]>([]);
+  const [loadingData, setLoadingData] = useState(false);
 
   const tableColumns = useMemo(
     (): Column[] => [
       {
-        Header: 'Produto',
-        columns: [
-          {
-            Header: 'ID',
-            accessor: 'product_id',
-          },
-          {
-            Header: 'Nome',
-            accessor: 'product_name',
-          },
-          {
-            Header: 'Composição',
-            accessor: 'product_composition',
-          },
-        ],
+        Header: 'ID',
+        accessor: 'product_id',
       },
       {
-        Header: 'Marca',
-        columns: [
-          {
-            Header: 'ID Marca',
-            accessor: 'brand_id',
-          },
-          {
-            Header: 'Nome',
-            accessor: 'brand_name',
-          },
-        ],
+        Header: 'Nome',
+        accessor: 'product_name',
       },
       {
-        Header: 'Categoria',
-        columns: [
-          {
-            Header: 'ID Categoria',
-            accessor: 'category_id',
-          },
-          {
-            Header: 'Nome',
-            accessor: 'category_name',
-          },
-          {
-            Header: 'ID Subcategoria',
-            accessor: 'subcategory_id',
-          },
-          {
-            Header: 'Subcategoria',
-            accessor: 'subcategory_name',
-          },
-        ],
+        Header: 'Composição',
+        accessor: 'product_composition',
+      },
+      {
+        Header: 'ID Marca',
+        accessor: 'brand_id',
+      },
+      {
+        Header: 'Nome',
+        accessor: 'brand_name',
+      },
+      {
+        Header: 'ID Categoria',
+        accessor: 'category_id',
+      },
+      {
+        Header: 'Nome',
+        accessor: 'category_name',
+      },
+      {
+        Header: 'ID Subcategoria',
+        accessor: 'subcategory_id',
+      },
+      {
+        Header: 'Subcategoria',
+        accessor: 'subcategory_name',
       },
     ],
     [],
@@ -76,6 +62,8 @@ const ListProducts: React.FC = () => {
   );
 
   useEffect(() => {
+    setLoadingData(true);
+
     api.get('products').then((response) => {
       const formattedProducts = response.data.map((item: IProductsProps) => ({
         ...item,
@@ -85,6 +73,7 @@ const ListProducts: React.FC = () => {
       }));
 
       setProducts(formattedProducts);
+      setLoadingData(false);
     });
   }, []);
 
@@ -93,10 +82,10 @@ const ListProducts: React.FC = () => {
       <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
 
       <Table
-        data={[...products, ...products, ...products]} // just for test pagination
+        data={products}
         columns={tableColumns}
         hideColumns={hideTableColumns}
-        useFilter
+        loadingData={loadingData}
       />
     </Container>
   );
