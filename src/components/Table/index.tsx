@@ -1,7 +1,14 @@
 import React, { useMemo } from 'react';
-import { Column, useTable, usePagination, useGlobalFilter } from 'react-table';
+import {
+  Column,
+  useTable,
+  usePagination,
+  useGlobalFilter,
+  useRowSelect,
+} from 'react-table';
 
 import GlobalInputFilter from './GlobalInputFilter';
+import IndeterminateInput from './IndeterminateInput';
 
 import {
   Container,
@@ -16,6 +23,11 @@ interface ITableProps {
   loadingData: boolean;
   columns: Column[];
   hideColumns?: Array<string>;
+  actions: {
+    create?: string;
+    update?: string;
+    delete?: string;
+  };
 }
 
 const Table: React.FC<ITableProps> = ({
@@ -23,6 +35,7 @@ const Table: React.FC<ITableProps> = ({
   loadingData,
   columns,
   hideColumns,
+  actions,
 }) => {
   const infoMessage = useMemo(() => {
     let message = '';
@@ -33,6 +46,18 @@ const Table: React.FC<ITableProps> = ({
 
     return message;
   }, [loadingData]);
+
+  const calculateColspan = useMemo((): number => {
+    let size = 0;
+
+    if (!hideColumns) {
+      size = columns.length + 1;
+    } else {
+      size = columns.length - hideColumns.length + 1;
+    }
+
+    return size;
+  }, [columns, hideColumns]);
 
   const {
     getTableProps,
@@ -60,6 +85,31 @@ const Table: React.FC<ITableProps> = ({
     },
     useGlobalFilter,
     usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((allColumns) => [
+        {
+          id: 'selection',
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateInput
+                name=""
+                {...getToggleAllPageRowsSelectedProps()}
+              />
+            </div>
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateInput
+                name=""
+                {...row.getToggleRowSelectedProps()}
+              />
+            </div>
+          ),
+        },
+        ...allColumns,
+      ]);
+    },
   );
 
   return (
@@ -136,16 +186,16 @@ const Table: React.FC<ITableProps> = ({
               );
             })) || (
             <tr>
-              <td colSpan={5}>{infoMessage}</td>
+              <td colSpan={calculateColspan}>{infoMessage}</td>
             </tr>
           )}
         </tbody>
       </TableContent>
 
       <TableFooter>
-        <button type="button">Cadastrar</button>
-        <button type="button">Alterar</button>
-        <button type="button">Deletar</button>
+        {actions?.create && <button type="button">Cadastrar</button>}
+        {actions?.update && <button type="button">Alterar</button>}
+        {actions?.delete && <button type="button">Deletar</button>}
       </TableFooter>
     </Container>
   );

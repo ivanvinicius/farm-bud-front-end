@@ -61,6 +61,11 @@ const ListProducts: React.FC = () => {
     [],
   );
 
+  const tableActions = useMemo(
+    () => ({ create: '/create-product-measure' }),
+    [],
+  );
+
   useEffect(() => {
     setLoadingData(true);
 
@@ -86,6 +91,7 @@ const ListProducts: React.FC = () => {
         columns={tableColumns}
         hideColumns={hideTableColumns}
         loadingData={loadingData}
+        actions={tableActions}
       />
     </Container>
   );
