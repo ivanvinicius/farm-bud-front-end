@@ -6,7 +6,7 @@ import api from '../../../services/api';
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
 
-import IProductsProps from '../../../dtos/Product/List/IProductsProps';
+import IProductsProps from '../../../dtos/Product/IProductsProps';
 
 import { Container } from './styles';
 
@@ -17,40 +17,42 @@ const ListProducts: React.FC = () => {
   const tableColumns = useMemo(
     (): Column[] => [
       {
-        Header: 'ID',
-        accessor: 'product_id',
+        Header: 'Produto',
+        accessor: 'product_name',
       },
       {
-        Header: 'Nome',
-        accessor: 'product_name',
+        Header: 'Marca',
+        accessor: 'brand_name',
+      },
+
+      {
+        Header: 'Categoria',
+        accessor: 'category_name',
+      },
+      {
+        Header: 'Subcategoria',
+        accessor: 'subcategory_name',
       },
       {
         Header: 'Composição',
         accessor: 'product_composition',
+      },
+
+      {
+        Header: 'ID',
+        accessor: 'product_id',
       },
       {
         Header: 'ID Marca',
         accessor: 'brand_id',
       },
       {
-        Header: 'Nome',
-        accessor: 'brand_name',
-      },
-      {
         Header: 'ID Categoria',
         accessor: 'category_id',
       },
       {
-        Header: 'Nome',
-        accessor: 'category_name',
-      },
-      {
         Header: 'ID Subcategoria',
         accessor: 'subcategory_id',
-      },
-      {
-        Header: 'Subcategoria',
-        accessor: 'subcategory_name',
       },
     ],
     [],
@@ -62,7 +64,9 @@ const ListProducts: React.FC = () => {
   );
 
   const tableActions = useMemo(
-    () => ({ create: '/create-product-measure' }),
+    () => ({
+      create: '/create-product-measure',
+    }),
     [],
   );
 
@@ -87,7 +91,7 @@ const ListProducts: React.FC = () => {
       <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
 
       <Table
-        data={products}
+        data={[...products]}
         columns={tableColumns}
         hideColumns={hideTableColumns}
         loadingData={loadingData}

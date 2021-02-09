@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Column,
   useTable,
@@ -6,9 +6,11 @@ import {
   useGlobalFilter,
   useRowSelect,
 } from 'react-table';
+import { useHistory } from 'react-router-dom';
 
 import GlobalInputFilter from './GlobalInputFilter';
 import IndeterminateInput from './IndeterminateInput';
+import ActionButton from '../ActionButton';
 
 import {
   Container,
@@ -22,12 +24,13 @@ interface ITableProps {
   data: Array<{}>;
   loadingData: boolean;
   columns: Column[];
-  hideColumns?: Array<string>;
   actions: {
     create?: string;
     update?: string;
     delete?: string;
+    detail?: string;
   };
+  hideColumns?: Array<string>;
 }
 
 const Table: React.FC<ITableProps> = ({
@@ -37,6 +40,9 @@ const Table: React.FC<ITableProps> = ({
   hideColumns,
   actions,
 }) => {
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const history = useHistory();
+
   const infoMessage = useMemo(() => {
     let message = '';
 
@@ -73,7 +79,8 @@ const Table: React.FC<ITableProps> = ({
     nextPage,
     previousPage,
     setGlobalFilter,
-    state: { pageIndex, globalFilter },
+    selectedFlatRows,
+    state: { pageIndex, globalFilter, selectedRowIds },
   } = useTable(
     {
       columns,
@@ -111,6 +118,28 @@ const Table: React.FC<ITableProps> = ({
       ]);
     },
   );
+
+  useMemo(() => {
+    setButtonDisabled(Object.keys(selectedRowIds).length > 1);
+  }, [selectedRowIds]);
+
+  const handleActionCreate = useCallback(() => {
+    return history.push(`${actions.create}`, {
+      product: selectedFlatRows[0]?.original,
+    });
+  }, [history, actions, selectedFlatRows]);
+
+  const handleActionUpdate = useCallback(() => {
+    alert('update'); //eslint-disable-line
+  }, []);
+
+  const handleActionDelete = useCallback(() => {
+    alert('delete'); //eslint-disable-line
+  }, []);
+
+  const handleActionDetail = useCallback(() => {
+    alert('detail'); //eslint-disable-line
+  }, []);
 
   return (
     <Container>
@@ -193,9 +222,36 @@ const Table: React.FC<ITableProps> = ({
       </TableContent>
 
       <TableFooter>
-        {actions?.create && <button type="button">Cadastrar</button>}
-        {actions?.update && <button type="button">Alterar</button>}
-        {actions?.delete && <button type="button">Deletar</button>}
+        {actions?.create && (
+          <ActionButton
+            disabled={buttonDisabled}
+            onClick={() => handleActionCreate()}
+            actionType="create"
+          />
+        )}
+
+        {actions?.update && (
+          <ActionButton
+            disabled={buttonDisabled}
+            onClick={() => handleActionUpdate()}
+            actionType="update"
+          />
+        )}
+
+        {actions?.delete && (
+          <ActionButton
+            onClick={() => handleActionDelete()}
+            actionType="delete"
+          />
+        )}
+
+        {actions?.detail && (
+          <ActionButton
+            disabled={buttonDisabled}
+            onClick={() => handleActionDetail()}
+            actionType="detail"
+          />
+        )}
       </TableFooter>
     </Container>
   );

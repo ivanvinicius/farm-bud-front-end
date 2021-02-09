@@ -22,7 +22,7 @@ export const Container = styled.div`
 
 export const TableHeader = styled.div`
   width: 100%;
-  padding: 15px;
+  padding: 16px;
 
   display: flex;
   align-items: center;
@@ -122,13 +122,4 @@ export const TableFooter = styled.div`
 
   width: 100%;
   padding: 16px;
-
-  button {
-    margin: 0 16px;
-    padding: 0 16px;
-    border: 0;
-    background-color: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-  }
 `;

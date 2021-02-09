@@ -1,81 +1,150 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Column } from 'react-table';
 
 import api from '../../../services/api';
 import formatToNumericBRL from '../../../utils/formatToNumericBRL';
-import IProductMeasureProps from '../../../dtos/IProductMeasureProps';
+
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
 
+import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasureProps';
+
 import { Container } from './styles';
 
-interface IFormattedProductMeasureProps extends IProductMeasureProps {
-  formattedVolume?: string;
-  formattedPrice?: string;
-}
-
 const ListProductMeasure: React.FC = () => {
-  const history = useHistory();
   const [productsMeasures, setProductsMeasures] = useState<
-    IFormattedProductMeasureProps[]
+    IProductMeasureProps[]
   >([]);
-
-  const navigateToUpdateProductMeasure = useCallback(
-    async (productMeasure: IFormattedProductMeasureProps) => {
-      return history.push('update-product-measure', { productMeasure });
-    },
-    [history],
-  );
 
   useEffect(() => {
     api.get('/products-measures').then((response) => {
-      const formattedProducts = response.data.map(
-        (item: IProductMeasureProps) => ({
-          ...item,
-          formattedVolume: formatToNumericBRL(item.volume),
-          formattedPrice: formatToNumericBRL(item.price),
-          formattedComposition:
-            item.product.composition === null
-              ? 'Não contém'
-              : item.product.composition,
-        }),
-      );
+      const formattedData = response.data.map((item: IProductMeasureProps) => ({
+        ...item,
 
-      setProductsMeasures(formattedProducts);
+        productmeasure_price: `R$ ${formatToNumericBRL(
+          item.productmeasure_price,
+        )}`,
+
+        productmeasure_volume: `${formatToNumericBRL(
+          item.productmeasure_volume,
+        )} ${item.productmeasure_measure_name}`,
+
+        productmeasure_product_composition:
+          item.productmeasure_product_composition === null
+            ? 'Não contém'
+            : item.productmeasure_product_composition,
+      }));
+
+      setProductsMeasures(formattedData);
     });
   }, []);
+
+  const tableColumns = useMemo(
+    (): Column[] => [
+      {
+        Header: 'Produto',
+        accessor: 'productmeasure_product_name',
+      },
+      {
+        Header: 'Valor',
+        accessor: 'productmeasure_price',
+      },
+      {
+        Header: 'Marca',
+        accessor: 'productmeasure_product_brand_name',
+      },
+      {
+        Header: 'Volume',
+        accessor: 'productmeasure_volume',
+      },
+      {
+        Header: 'Categoria',
+        accessor: 'productmeasure_product_subcategory_category_name',
+      },
+      {
+        Header: 'Subcategoria',
+        accessor: 'productmeasure_product_subcategory_name',
+      },
+      {
+        Header: 'Composição',
+        accessor: 'productmeasure_product_composition',
+      },
+
+      {
+        Header: 'ID',
+        accessor: 'productmeasure_id',
+      },
+      {
+        Header: 'Provider ID',
+        accessor: 'productmeasure_provider_id',
+      },
+      {
+        Header: 'Product ID',
+        accessor: 'productmeasure_product_id',
+      },
+
+      {
+        Header: 'Measure ID',
+        accessor: 'productmeasure_measure_id',
+      },
+      {
+        Header: 'Subcategory ID',
+        accessor: 'productmeasure_product_subcategory_id',
+      },
+      {
+        Header: 'Brand ID',
+        accessor: 'productmeasure_product_brand_id',
+      },
+      {
+        Header: 'Category ID',
+        accessor: 'productmeasure_product_subcategory_category_id',
+      },
+      {
+        Header: 'Measure Name',
+        accessor: 'productmeasure_measure_name',
+      },
+      {
+        Header: 'Measure Type',
+        accessor: 'productmeasure_measure_type',
+      },
+    ],
+    [],
+  );
+
+  const hideTableColumns = useMemo(
+    () => [
+      'productmeasure_id',
+      'productmeasure_provider_id',
+      'productmeasure_product_id',
+      'productmeasure_measure_id',
+      'productmeasure_product_subcategory_id',
+      'productmeasure_product_brand_id',
+      'productmeasure_product_subcategory_category_id',
+      'productmeasure_measure_type',
+      'productmeasure_measure_name',
+    ],
+    [],
+  );
+
+  const tableActions = useMemo(
+    () => ({
+      update: '/',
+      delete: '/',
+    }),
+    [],
+  );
 
   return (
     <Container>
       <Header urlBack="/products-menu" headerTitle="Meus Produtos" />
 
-      {/* <Table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Marca</th>
-            <th>Volume</th>
-            <th>Preço</th>
-            <th>Composição</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productsMeasures.map((item) => (
-            <tr
-              key={item.id}
-              onClick={() => navigateToUpdateProductMeasure(item)}
-            >
-              <td>{item.product.name}</td>
-              <td>{item.product.subcategory.category.name}</td>
-              <td>{item.product.brand.name}</td>
-              <td>{`${item.formattedVolume} ${item.measure.name}`}</td>
-              <td>{`R$ ${item.formattedPrice}`}</td>
-              <td>{item.formattedComposition}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table> */}
+      <Table
+        data={productsMeasures}
+        columns={tableColumns}
+        hideColumns={hideTableColumns}
+        actions={tableActions}
+        loadingData={false}
+      />
     </Container>
   );
 };

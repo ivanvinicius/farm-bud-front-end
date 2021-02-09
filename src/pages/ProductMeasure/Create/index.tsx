@@ -14,13 +14,14 @@ import Select from '../../../components/Select';
 import CurrencyInput from '../../../components/CurrencyInput';
 import VolumetricInput from '../../../components/VolumetricInput';
 
-import IMeasureProps from '../../../dtos/IMeasureProps';
+import IProductProps from '../../../dtos/Product/IProductsProps';
+import IMeasureProps from '../../../dtos/Measure/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
 interface ILocationProps {
-  product: any;
+  product: IProductProps;
 }
 
 interface IFormSubmitProps {
@@ -64,7 +65,7 @@ const CreateProductMeasure: React.FC = () => {
         );
 
         const formattedData = {
-          product_id: product.id,
+          product_id: product.product_id,
           measure_id: measure,
           volume,
           price,
@@ -98,11 +99,11 @@ const CreateProductMeasure: React.FC = () => {
         <Form
           ref={formRef}
           initialData={{
-            name: product.name,
-            brand: product.brand.name,
-            category: product.subcategory.category.name,
-            subcategory: product.subcategory.name,
-            composition: product.formattedComposition,
+            name: product.product_name,
+            brand: product.brand_name,
+            category: product.category_name,
+            subcategory: product.subcategory_name,
+            composition: product.product_composition,
           }}
           onSubmit={handleFormSubmit}
         >
