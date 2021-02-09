@@ -21,11 +21,11 @@ const ListProductMeasure: React.FC = () => {
       const formattedData = response.data.map((item: IProductMeasureProps) => ({
         ...item,
 
-        productmeasure_price: `R$ ${formatToNumericBRL(
+        productmeasure_formatted_price: `R$ ${formatToNumericBRL(
           item.productmeasure_price,
         )}`,
 
-        productmeasure_volume: `${formatToNumericBRL(
+        productmeasure_formatted_volume: `${formatToNumericBRL(
           item.productmeasure_volume,
         )} ${item.productmeasure_measure_name}`,
 
@@ -47,7 +47,7 @@ const ListProductMeasure: React.FC = () => {
       },
       {
         Header: 'Valor',
-        accessor: 'productmeasure_price',
+        accessor: 'productmeasure_formatted_price',
       },
       {
         Header: 'Marca',
@@ -55,7 +55,7 @@ const ListProductMeasure: React.FC = () => {
       },
       {
         Header: 'Volume',
-        accessor: 'productmeasure_volume',
+        accessor: 'productmeasure_formatted_volume',
       },
       {
         Header: 'Categoria',
@@ -128,7 +128,7 @@ const ListProductMeasure: React.FC = () => {
 
   const tableActions = useMemo(
     () => ({
-      update: '/',
+      update: '/update-product-measure',
       delete: '/',
     }),
     [],

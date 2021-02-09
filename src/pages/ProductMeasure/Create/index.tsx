@@ -21,7 +21,7 @@ import ISelectOption from '../../../dtos/ISelectOption';
 import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
 interface ILocationProps {
-  product: IProductProps;
+  item: IProductProps;
 }
 
 interface IFormSubmitProps {
@@ -31,7 +31,7 @@ interface IFormSubmitProps {
 }
 
 const CreateProductMeasure: React.FC = () => {
-  const { product } = useLocation().state as ILocationProps;
+  const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
   const [measures, setMeasures] = useState<ISelectOption[]>([]);
@@ -65,7 +65,7 @@ const CreateProductMeasure: React.FC = () => {
         );
 
         const formattedData = {
-          product_id: product.product_id,
+          product_id: item.product_id,
           measure_id: measure,
           volume,
           price,
@@ -88,7 +88,7 @@ const CreateProductMeasure: React.FC = () => {
         toast.error('Não foi possível realizar o cadastro.');
       }
     },
-    [history, product],
+    [history, item],
   );
 
   return (
@@ -99,11 +99,11 @@ const CreateProductMeasure: React.FC = () => {
         <Form
           ref={formRef}
           initialData={{
-            name: product.product_name,
-            brand: product.brand_name,
-            category: product.category_name,
-            subcategory: product.subcategory_name,
-            composition: product.product_composition,
+            name: item.product_name,
+            brand: item.brand_name,
+            category: item.category_name,
+            subcategory: item.subcategory_name,
+            composition: item.product_composition,
           }}
           onSubmit={handleFormSubmit}
         >

@@ -40,7 +40,8 @@ const Table: React.FC<ITableProps> = ({
   hideColumns,
   actions,
 }) => {
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [buttonCRUDisabled, setButtonCRUDisabled] = useState(true); // CRU means Create, Read and update
+  const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(true);
   const history = useHistory();
 
   const infoMessage = useMemo(() => {
@@ -120,18 +121,24 @@ const Table: React.FC<ITableProps> = ({
   );
 
   useMemo(() => {
-    setButtonDisabled(Object.keys(selectedRowIds).length > 1);
+    setButtonCRUDisabled(Object.keys(selectedRowIds).length !== 1);
+  }, [selectedRowIds]);
+
+  useMemo(() => {
+    setButtonDeleteDisabled(Object.keys(selectedRowIds).length < 1);
   }, [selectedRowIds]);
 
   const handleActionCreate = useCallback(() => {
     return history.push(`${actions.create}`, {
-      product: selectedFlatRows[0]?.original,
+      item: selectedFlatRows[0]?.original,
     });
   }, [history, actions, selectedFlatRows]);
 
   const handleActionUpdate = useCallback(() => {
-    alert('update'); //eslint-disable-line
-  }, []);
+    return history.push(`${actions.update}`, {
+      item: selectedFlatRows[0]?.original,
+    });
+  }, [history, actions, selectedFlatRows]);
 
   const handleActionDelete = useCallback(() => {
     alert('delete'); //eslint-disable-line
@@ -224,7 +231,7 @@ const Table: React.FC<ITableProps> = ({
       <TableFooter>
         {actions?.create && (
           <ActionButton
-            disabled={buttonDisabled}
+            disabled={buttonCRUDisabled}
             onClick={() => handleActionCreate()}
             actionType="create"
           />
@@ -232,7 +239,7 @@ const Table: React.FC<ITableProps> = ({
 
         {actions?.update && (
           <ActionButton
-            disabled={buttonDisabled}
+            disabled={buttonCRUDisabled}
             onClick={() => handleActionUpdate()}
             actionType="update"
           />
@@ -240,6 +247,7 @@ const Table: React.FC<ITableProps> = ({
 
         {actions?.delete && (
           <ActionButton
+            disabled={buttonDeleteDisabled}
             onClick={() => handleActionDelete()}
             actionType="delete"
           />
@@ -247,7 +255,7 @@ const Table: React.FC<ITableProps> = ({
 
         {actions?.detail && (
           <ActionButton
-            disabled={buttonDisabled}
+            disabled={buttonCRUDisabled}
             onClick={() => handleActionDetail()}
             actionType="detail"
           />

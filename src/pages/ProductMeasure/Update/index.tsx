@@ -1,56 +1,39 @@
-import React from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
-// import React, { useEffect, useRef, useCallback, useState } from 'react';
-// import { useLocation, useHistory } from 'react-router-dom';
-// import { FormHandles } from '@unform/core';
-// import { Form } from '@unform/web';
-// import * as Yup from 'yup';
-// import { toast } from 'react-toastify';
-// import { FaTrash } from 'react-icons/fa';
+import api from '../../../services/api';
+import getValidationErrors from '../../../utils/getValidationErrors';
+import Header from '../../../components/Header';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import Select from '../../../components/Select';
+import CurrencyInput from '../../../components/CurrencyInput';
+import VolumetricInput from '../../../components/VolumetricInput';
+import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasureProps';
+import IMeasureProps from '../../../dtos/Measure/IMeasureProps';
+import ISelectOption from '../../../dtos/ISelectOption';
 
-// import api from '../../../services/api';
-// import getValidationErrors from '../../../utils/getValidationErrors';
-// import Header from '../../../components/Header';
-// import Input from '../../../components/Input';
-// import Button from '../../../components/Button';
-// import Select from '../../../components/Select';
-// import CurrencyInput from '../../../components/CurrencyInput';
-// import VolumetricInput from '../../../components/VolumetricInput';
-// import Modal from '../../../components/Modal';
-// import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasureProps';
-// import IMeasureProps from '../../../dtos/Measure/IMeasureProps';
-// import ISelectOption from '../../../dtos/ISelectOption';
+import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
-// import {
-//   Container,
-//   Content,
-//   InfoRow,
-//   CategoryRow,
-//   VolumeRow,
-//   TrashArea,
-//   ModalContent,
-// } from './styles';
+interface ILocationProps {
+  item: IProductMeasureProps;
+}
 
-// interface ILocationProps {
-//   productMeasure: IProductMeasureProps;
-// }
-
-// interface IFormSubmitProps {
-//   measure: string;
-//   volume: string;
-//   price: string;
-// }
+interface IFormSubmitProps {
+  measure: string;
+  volume: string;
+  price: string;
+}
 
 const CreateProductMeasure: React.FC = () => {
-  // const { productMeasure } = useLocation().state as ILocationProps;
-  // const history = useHistory();
-  // const formRef = useRef<FormHandles>(null);
-  // const [measures, setMeasures] = useState<ISelectOption[]>([]);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  // const handleToggleModal = useCallback(() => {
-  //   setModalIsOpen((state) => !state);
-  // }, []);
+  const { item } = useLocation().state as ILocationProps;
+  const history = useHistory();
+  const formRef = useRef<FormHandles>(null);
+  const [measures, setMeasures] = useState<ISelectOption[]>([]);
 
   // const handleDeleteProduct = useCallback(() => {
   //   try {
@@ -64,175 +47,148 @@ const CreateProductMeasure: React.FC = () => {
   //   }
   // }, [history, productMeasure.id]);
 
-  // const handleFormSubmit = useCallback(
-  //   async ({ volume, measure, price }: IFormSubmitProps) => {
-  //     try {
-  //       formRef.current?.setErrors({});
+  const handleFormSubmit = useCallback(
+    async ({ volume, measure, price }: IFormSubmitProps) => {
+      try {
+        formRef.current?.setErrors({});
 
-  //       const schema = Yup.object().shape({
-  //         volume: Yup.string().required('Informe o volume'),
-  //         measure: Yup.string().required('Informe a unidade de medida.'),
-  //         price: Yup.string().required('Informe o valor'),
-  //       });
+        const schema = Yup.object().shape({
+          volume: Yup.string().required('Informe o volume'),
+          measure: Yup.string().required('Informe a unidade de medida.'),
+          price: Yup.string().required('Informe o valor'),
+        });
 
-  //       await schema.validate(
-  //         { measure, volume, price },
-  //         { abortEarly: false },
-  //       );
+        await schema.validate(
+          { measure, volume, price },
+          { abortEarly: false },
+        );
 
-  //       const formattedData = {
-  //         id: productMeasure.id,
-  //         product_id: productMeasure.product_id,
-  //         measure_id: measure,
-  //         volume,
-  //         price,
-  //       };
+        const formattedData = {
+          id: item.productmeasure_id,
+          product_id: item.productmeasure_product_id,
+          measure_id: measure,
+          volume,
+          price,
+        };
 
-  //       await api.patch('/products-measures', formattedData);
+        await api.patch('/products-measures', formattedData);
 
-  //       toast.success('Atualização realizada.');
+        toast.success('Atualização realizada.');
 
-  //       history.push('/products-measures');
-  //     } catch (err) {
-  //       if (err instanceof Yup.ValidationError) {
-  //         const formattedErrors = getValidationErrors(err);
+        history.push('/products-measures');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const formattedErrors = getValidationErrors(err);
 
-  //         formRef.current?.setErrors(formattedErrors);
+          formRef.current?.setErrors(formattedErrors);
 
-  //         return;
-  //       }
+          return;
+        }
 
-  //       toast.error('Não foi possível atualizar as informações.');
-  //     }
-  //   },
-  //   [productMeasure, history],
-  // );
+        toast.error('Não foi possível atualizar as informações.');
+      }
+    },
+    [item, history],
+  );
 
-  // useEffect(() => {
-  //   const formattedMeasures: ISelectOption[] = [];
+  useEffect(() => {
+    const formattedMeasures: ISelectOption[] = [];
 
-  //   api.get(`/measures/1`).then((response: any) => { //eslint-disable-line
-  //     response.data.map(({ id, name }: IMeasureProps) => {
-  //       return formattedMeasures.push({ value: id, label: name });
-  //     });
+    api.get(`/measures/1`).then((response: any) => { //eslint-disable-line
+      response.data.map(({ id, name }: IMeasureProps) => {
+        return formattedMeasures.push({ value: id, label: name });
+      });
 
-  //     setMeasures(formattedMeasures);
-  //   });
-  // }, []);
+      setMeasures(formattedMeasures);
+    });
+  }, []);
 
   return (
-    <>
-      {/* <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
-        <ModalContent>
-          <span>
-            {'Tem certeza que deseja apagar o produto '}
-            <strong>{`${productMeasure.product.brand.name} ${productMeasure.product.name}`}</strong>
-            {' ?'}
-          </span>
+    <Container>
+      <Header
+        urlBack="/products-measures"
+        headerTitle="Atualizar Informações"
+      />
 
-          <div>
-            <button type="submit" onClick={handleDeleteProduct}>
-              Apagar
-            </button>
-            <button type="submit" onClick={handleToggleModal}>
-              Cancelar
-            </button>
-          </div>
-        </ModalContent>
-      </Modal>
+      <Content>
+        <Form
+          ref={formRef}
+          onSubmit={handleFormSubmit}
+          initialData={{
+            name: item.productmeasure_product_name,
+            brand: item.productmeasure_product_brand_name,
+            category: item.productmeasure_product_subcategory_category_name,
+            subcategory: item.productmeasure_product_subcategory_name,
+            composition: item.productmeasure_product_composition,
+            measure: {
+              label: item.productmeasure_measure_name,
+              value: item.productmeasure_measure_id,
+            },
+            volume: item.productmeasure_volume,
+            price: item.productmeasure_price,
+          }}
+        >
+          <InfoRow>
+            <div>
+              <label>Nome</label>
+              <Input name="name" disabled placeholder="Nome do produto" />
+            </div>
+            <div>
+              <label>Marca</label>
+              <Input name="brand" disabled placeholder="Marca" />
+            </div>
+          </InfoRow>
+          <CategoryRow>
+            <div>
+              <label>Categoria</label>
+              <Input name="category" disabled placeholder="Categoria" />
+            </div>
 
-      <Container>
-        <Header
-          urlBack="/products-measures"
-          headerTitle="Atualizar Informações"
-        />
+            <div>
+              <label>Subcategoria</label>
+              <Input name="subcategory" disabled placeholder="Subcategoria" />
+            </div>
 
-        <Content>
-          <Form
-            ref={formRef}
-            onSubmit={handleFormSubmit}
-            initialData={{
-              name: productMeasure.product.name,
-              brand: productMeasure.product.brand.name,
-              category: productMeasure.product.subcategory.category.name,
-              subcategory: productMeasure.product.subcategory.name,
-              composition: productMeasure.formattedComposition,
-              measure: {
-                label: productMeasure.measure.name,
-                value: productMeasure.measure.id,
-              },
-              volume: productMeasure.volume,
-              price: productMeasure.price,
-            }}
-          >
-            <TrashArea>
-              <button type="button" onClick={handleToggleModal}>
-                Apagar o Produto
-                <FaTrash size={16} />
-              </button>
-            </TrashArea>
-            <InfoRow>
-              <div>
-                <label>Nome</label>
-                <Input name="name" disabled placeholder="Nome do produto" />
-              </div>
-              <div>
-                <label>Marca</label>
-                <Input name="brand" disabled placeholder="Marca" />
-              </div>
-            </InfoRow>
-            <CategoryRow>
-              <div>
-                <label>Categoria</label>
-                <Input name="category" disabled placeholder="Categoria" />
-              </div>
+            <div>
+              <label>Composição</label>
+              <Input name="composition" disabled placeholder="Composição" />
+            </div>
+          </CategoryRow>
+          <VolumeRow>
+            <div>
+              <label>Volume</label>
+              <VolumetricInput
+                name="volume"
+                placeholder="50,00"
+                decimalSeparator=","
+                groupSeparator="."
+                allowDecimals
+                decimalsLimit={2}
+              />
+            </div>
 
-              <div>
-                <label>Subcategoria</label>
-                <Input name="subcategory" disabled placeholder="Subcategoria" />
-              </div>
+            <div>
+              <label>Unidade de medida</label>
+              <Select name="measure" options={measures} />
+            </div>
+            <div>
+              <label>Valor</label>
+              <CurrencyInput
+                name="price"
+                placeholder="130,00"
+                decimalSeparator=","
+                groupSeparator="."
+                allowDecimals
+                prefix="R$ "
+                decimalsLimit={2}
+              />
+            </div>
+          </VolumeRow>
 
-              <div>
-                <label>Composição</label>
-                <Input name="composition" disabled placeholder="Composição" />
-              </div>
-            </CategoryRow>
-            <VolumeRow>
-              <div>
-                <label>Volume</label>
-                <VolumetricInput
-                  name="volume"
-                  placeholder="50,00"
-                  decimalSeparator=","
-                  groupSeparator="."
-                  allowDecimals
-                  decimalsLimit={2}
-                />
-              </div>
-
-              <div>
-                <label>Unidade de medida</label>
-                <Select name="measure" options={measures} />
-              </div>
-              <div>
-                <label>Valor</label>
-                <CurrencyInput
-                  name="price"
-                  placeholder="130,00"
-                  decimalSeparator=","
-                  groupSeparator="."
-                  allowDecimals
-                  prefix="R$ "
-                  decimalsLimit={2}
-                />
-              </div>
-            </VolumeRow>
-
-            <Button type="submit">Atualizar</Button>
-          </Form>
-        </Content>
-      </Container> */}
-    </>
+          <Button type="submit">Atualizar</Button>
+        </Form>
+      </Content>
+    </Container>
   );
 };
 
