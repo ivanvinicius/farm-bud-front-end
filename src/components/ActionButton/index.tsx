@@ -11,7 +11,7 @@ const ActionButton: React.FC<IActionButton> = ({ actionType, ...rest }) => {
     () => ({
       create: 'Cadastrar',
       update: 'Atualizar',
-      delete: 'Deletar',
+      delete: 'Excluir',
       detail: 'Visualizar',
     }),
     [],

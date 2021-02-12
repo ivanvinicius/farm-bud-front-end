@@ -49,6 +49,7 @@ const Input: React.FC<IInputProps> = ({ name, icon: Icon, ...rest }) => {
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         defaultValue={defaultValue}
+        autoComplete="off"
         {...rest}
       />
       {error && (

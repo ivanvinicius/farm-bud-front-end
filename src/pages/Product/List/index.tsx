@@ -65,7 +65,7 @@ const ListProducts: React.FC = () => {
 
   const tableActions = useMemo(
     () => ({
-      create: '/create-product-measure',
+      create: { url: '/create-product-measure' },
     }),
     [],
   );

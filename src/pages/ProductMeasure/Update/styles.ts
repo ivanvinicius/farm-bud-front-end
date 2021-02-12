@@ -1,41 +1,5 @@
 import styled from 'styled-components';
 
-export const ModalContent = styled.div`
-  width: 500px;
-  height: 200px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-top: 50px;
-    text-align: center;
-
-    button {
-      border: 0;
-      background: transparent;
-      color: var(--color-purple);
-      transition: all 0.2s;
-
-      & + button {
-        margin-left: 56px;
-      }
-
-      &:hover {
-        color: var(--color-orange);
-      }
-    }
-  }
-`;
-
-export const Container = styled.div``;
-
 export const Content = styled.div`
   width: 750px;
   height: 600px;
@@ -88,27 +52,4 @@ export const VolumeRow = styled.section`
   display: grid;
   grid-template-columns: 190px 170px 150px;
   column-gap: 18px;
-`;
-
-export const TrashArea = styled.div`
-  display: flex;
-  justify-content: flex-end;
-
-  button {
-    display: flex;
-    align-items: center;
-
-    border: 0;
-    background: transparent;
-    color: var(--color-orange);
-    transition: all 0.2s;
-
-    svg {
-      margin-left: 8px;
-    }
-
-    &:hover {
-      color: var(--color-orange-dark);
-    }
-  }
 `;

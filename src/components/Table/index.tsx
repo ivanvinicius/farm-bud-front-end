@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+
 import React, { useState, useMemo, useCallback } from 'react';
 import {
   Column,
@@ -7,10 +9,14 @@ import {
   useRowSelect,
 } from 'react-table';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import api from '../../services/api';
 
 import GlobalInputFilter from './GlobalInputFilter';
 import IndeterminateInput from './IndeterminateInput';
 import ActionButton from '../ActionButton';
+import Modal from '../Modal';
 
 import {
   Container,
@@ -18,17 +24,27 @@ import {
   PaginationButtons,
   TableContent,
   TableFooter,
+  ModalContent,
 } from './styles';
 
 interface ITableProps {
   data: Array<{}>;
   loadingData: boolean;
   columns: Column[];
-  actions: {
-    create?: string;
-    update?: string;
-    delete?: string;
-    detail?: string;
+  actions?: {
+    create?: {
+      url: string;
+    };
+    update?: {
+      url: string;
+    };
+    delete?: {
+      url: string;
+      columnNameAccessor: string;
+    };
+    detail?: {
+      url: string;
+    };
   };
   hideColumns?: Array<string>;
 }
@@ -40,31 +56,11 @@ const Table: React.FC<ITableProps> = ({
   hideColumns,
   actions,
 }) => {
-  const [buttonCRUDisabled, setButtonCRUDisabled] = useState(true); // CRU means Create, Read and update
+  const [buttonCRUDisabled, setButtonCRUDisabled] = useState(true); // CRU means Create, Read and Update
   const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<Array<string>>([]);
   const history = useHistory();
-
-  const infoMessage = useMemo(() => {
-    let message = '';
-
-    loadingData
-      ? (message = 'Carregando itens...')
-      : (message = 'Nenhum item foi encontrado!');
-
-    return message;
-  }, [loadingData]);
-
-  const calculateColspan = useMemo((): number => {
-    let size = 0;
-
-    if (!hideColumns) {
-      size = columns.length + 1;
-    } else {
-      size = columns.length - hideColumns.length + 1;
-    }
-
-    return size;
-  }, [columns, hideColumns]);
 
   const {
     getTableProps,
@@ -120,6 +116,43 @@ const Table: React.FC<ITableProps> = ({
     },
   );
 
+  const handleToggleModal = useCallback(() => {
+    setModalIsOpen((state) => !state);
+  }, []);
+
+  const infoMessage = useMemo(() => {
+    let message = '';
+
+    loadingData
+      ? (message = 'Carregando itens...')
+      : (message = 'Nenhum item foi encontrado!');
+
+    return message;
+  }, [loadingData]);
+
+  const calculateColspan = useMemo((): number => {
+    let size = 0;
+
+    if (!hideColumns) {
+      size = columns.length + 1;
+    } else {
+      size = columns.length - hideColumns.length + 1;
+    }
+
+    return size;
+  }, [columns, hideColumns]);
+
+  const modalMessage = useMemo(() => {
+    let message = '';
+    const { length } = Object.keys(selectedRowIds);
+
+    length > 1
+      ? (message = `Você tem certeza que deseja excluir os ${length} produtos selecionados?`)
+      : (message = `Você tem certeza que deseja excluir o produto selecionado?`);
+
+    return message;
+  }, [selectedRowIds]);
+
   useMemo(() => {
     setButtonCRUDisabled(Object.keys(selectedRowIds).length !== 1);
   }, [selectedRowIds]);
@@ -128,21 +161,47 @@ const Table: React.FC<ITableProps> = ({
     setButtonDeleteDisabled(Object.keys(selectedRowIds).length < 1);
   }, [selectedRowIds]);
 
+  useMemo(() => {
+    const columnAccessor = String(actions?.delete?.columnNameAccessor);
+
+    const selectedRows: Array<string> = selectedFlatRows.map(
+      (row: any) => row?.original[columnAccessor],
+    );
+
+    setItemsToDelete(selectedRows);
+  }, [selectedFlatRows, actions]);
+
   const handleActionCreate = useCallback(() => {
-    return history.push(`${actions.create}`, {
+    return history.push(`${actions?.create?.url}`, {
       item: selectedFlatRows[0]?.original,
     });
   }, [history, actions, selectedFlatRows]);
 
   const handleActionUpdate = useCallback(() => {
-    return history.push(`${actions.update}`, {
+    return history.push(`${actions?.update?.url}`, {
       item: selectedFlatRows[0]?.original,
     });
   }, [history, actions, selectedFlatRows]);
 
   const handleActionDelete = useCallback(() => {
-    alert('delete'); //eslint-disable-line
-  }, []);
+    try {
+      const column = actions?.delete?.columnNameAccessor;
+
+      if (column) {
+        api.delete(`/products-measures`, { data: { ids: itemsToDelete } });
+
+        // const dataFiltered = data.filter((item: any) => {
+        //   return !itemsToDelete.includes(item[column]);
+        // });
+
+        toast.error('Terminar o método da forma correta.');
+      }
+    } catch (err) {
+      toast.error('Ocorreu um erro durante a exclusão.');
+    }
+
+    handleToggleModal();
+  }, [handleToggleModal, itemsToDelete, actions]);
 
   const handleActionDetail = useCallback(() => {
     alert('detail'); //eslint-disable-line
@@ -150,6 +209,21 @@ const Table: React.FC<ITableProps> = ({
 
   return (
     <Container>
+      <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
+        <ModalContent>
+          <span>{modalMessage}</span>
+
+          <div>
+            <button type="button" onClick={() => handleActionDelete()}>
+              Excluir
+            </button>
+            <button type="button" onClick={() => handleToggleModal()}>
+              Cancelar
+            </button>
+          </div>
+        </ModalContent>
+      </Modal>
+
       <TableHeader>
         <GlobalInputFilter
           globalFilter={globalFilter}
@@ -248,7 +322,7 @@ const Table: React.FC<ITableProps> = ({
         {actions?.delete && (
           <ActionButton
             disabled={buttonDeleteDisabled}
-            onClick={() => handleActionDelete()}
+            onClick={() => handleToggleModal()}
             actionType="delete"
           />
         )}

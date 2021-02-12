@@ -42,6 +42,10 @@ const ListProductMeasure: React.FC = () => {
   const tableColumns = useMemo(
     (): Column[] => [
       {
+        Header: 'ID',
+        accessor: 'productmeasure_id',
+      },
+      {
         Header: 'Produto',
         accessor: 'productmeasure_product_name',
       },
@@ -70,10 +74,6 @@ const ListProductMeasure: React.FC = () => {
         accessor: 'productmeasure_product_composition',
       },
 
-      {
-        Header: 'ID',
-        accessor: 'productmeasure_id',
-      },
       {
         Header: 'Provider ID',
         accessor: 'productmeasure_provider_id',
@@ -128,8 +128,14 @@ const ListProductMeasure: React.FC = () => {
 
   const tableActions = useMemo(
     () => ({
-      update: '/update-product-measure',
-      delete: '/',
+      update: {
+        url: '/update-product-measure',
+      },
+
+      delete: {
+        url: '/',
+        columnNameAccessor: 'productmeasure_id',
+      },
     }),
     [],
   );

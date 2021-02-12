@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import ReactSelect, { OptionTypeBase, Props } from 'react-select';
 import { useField } from '@unform/core';
@@ -10,7 +12,7 @@ interface ISelectProps extends Props<OptionTypeBase> {
 }
 
 const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
-  const selectRef = useRef<any>(null); // eslint-disable-line
+  const selectRef = useRef<any>(null);
   const { fieldName, defaultValue, error, registerField } = useField(name);
   const [isFilled, setIsFilled] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue);
@@ -20,7 +22,7 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
       name: fieldName,
       ref: selectRef.current,
 
-      getValue: (ref: any) => { // eslint-disable-line
+      getValue: (ref: any) => {
         if (rest.isMulti) {
           if (!ref.state.value) {
             return [];
@@ -33,7 +35,7 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
         return ref.state.value.value;
       },
 
-      setValue(_, value: any) { // eslint-disable-line
+      setValue(_, value: any) {
         if (value) {
           setSelectedValue(value);
         }
@@ -65,6 +67,7 @@ const Select: React.FC<ISelectProps> = ({ name, ...rest }) => {
         classNamePrefix="react-select"
         noOptionsMessage={() => 'Sem opções'}
         placeholder="Selecione..."
+        captureMenuScroll={false}
         {...rest}
       />
     </Container>

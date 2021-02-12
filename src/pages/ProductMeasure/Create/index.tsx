@@ -75,7 +75,7 @@ const CreateProductMeasure: React.FC = () => {
 
         toast.success('Cadastro realizado.');
 
-        history.push('/');
+        history.push('/products');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const formattedErrors = getValidationErrors(err);

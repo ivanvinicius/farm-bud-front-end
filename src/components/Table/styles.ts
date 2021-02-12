@@ -123,3 +123,41 @@ export const TableFooter = styled.div`
   width: 100%;
   padding: 16px;
 `;
+
+export const ModalContent = styled.div`
+  width: 500px;
+  height: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    text-align: center;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 50px;
+    text-align: center;
+
+    button {
+      border: 0;
+      background: transparent;
+      color: var(--color-purple);
+      transition: all 0.2s;
+
+      & + button {
+        margin-left: 56px;
+      }
+
+      &:hover {
+        color: var(--color-orange);
+      }
+    }
+  }
+`;

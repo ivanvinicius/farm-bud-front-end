@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
@@ -49,7 +51,7 @@ const SignUp: React.FC = () => {
     });
   }, []);
 
-  const handleFindCityByState = useCallback(async (data: any) => { // eslint-disable-line
+  const handleFindCityByState = useCallback(async (data: any) => {
     const selectRef = formRef.current?.getFieldRef('city');
 
     selectRef.select.clearValue();

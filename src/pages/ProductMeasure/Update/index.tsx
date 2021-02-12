@@ -17,7 +17,7 @@ import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasurePr
 import IMeasureProps from '../../../dtos/Measure/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
 
-import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
+import { Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
 interface ILocationProps {
   item: IProductMeasureProps;
@@ -34,18 +34,6 @@ const CreateProductMeasure: React.FC = () => {
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
   const [measures, setMeasures] = useState<ISelectOption[]>([]);
-
-  // const handleDeleteProduct = useCallback(() => {
-  //   try {
-  //     api.delete(`/products-measures/${productMeasure.id}`);
-
-  //     toast.success('Produto deletado!');
-
-  //     history.push('/products-measures');
-  //   } catch (err) {
-  //     toast.error('Não foi possível deletar o produto, tente mais tarde');
-  //   }
-  // }, [history, productMeasure.id]);
 
   const handleFormSubmit = useCallback(
     async ({ volume, measure, price }: IFormSubmitProps) => {
@@ -104,7 +92,7 @@ const CreateProductMeasure: React.FC = () => {
   }, []);
 
   return (
-    <Container>
+    <>
       <Header
         urlBack="/products-measures"
         headerTitle="Atualizar Informações"
@@ -188,7 +176,7 @@ const CreateProductMeasure: React.FC = () => {
           <Button type="submit">Atualizar</Button>
         </Form>
       </Content>
-    </Container>
+    </>
   );
 };
 
