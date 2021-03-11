@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Column } from 'react-table';
 
 import api from '../../../services/api';
 import formatToNumericBRL from '../../../utils/formatToNumericBRL';
+import { useTableContext } from '../../../hooks/table';
 
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
@@ -12,9 +13,7 @@ import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasurePr
 import { Container } from './styles';
 
 const ListProductMeasure: React.FC = () => {
-  const [productsMeasures, setProductsMeasures] = useState<
-    IProductMeasureProps[]
-  >([]);
+  const { setData } = useTableContext();
 
   useEffect(() => {
     api.get('/products-measures').then((response) => {
@@ -35,11 +34,11 @@ const ListProductMeasure: React.FC = () => {
             : item.productmeasure_product_composition,
       }));
 
-      setProductsMeasures(formattedData);
+      setData(formattedData);
     });
-  }, []);
+  }, [setData]);
 
-  const tableColumns = useMemo(
+  const headerColumns = useMemo(
     (): Column[] => [
       {
         Header: 'ID',
@@ -111,7 +110,7 @@ const ListProductMeasure: React.FC = () => {
     [],
   );
 
-  const hideTableColumns = useMemo(
+  const hideColumns = useMemo(
     () => [
       'productmeasure_id',
       'productmeasure_provider_id',
@@ -133,7 +132,7 @@ const ListProductMeasure: React.FC = () => {
       },
 
       delete: {
-        url: '/',
+        url: '/products-measures',
         columnNameAccessor: 'productmeasure_id',
       },
     }),
@@ -145,11 +144,9 @@ const ListProductMeasure: React.FC = () => {
       <Header urlBack="/products-menu" headerTitle="Meus Produtos" />
 
       <Table
-        data={productsMeasures}
-        columns={tableColumns}
-        hideColumns={hideTableColumns}
+        tableHeaderColumns={headerColumns}
+        hidedColumns={hideColumns}
         actions={tableActions}
-        loadingData={false}
       />
     </Container>
   );

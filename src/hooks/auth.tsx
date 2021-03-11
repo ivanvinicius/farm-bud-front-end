@@ -3,9 +3,9 @@ import React, {
   useCallback,
   useState,
   useContext,
-  useEffect,
+  // useEffect,
 } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 import api from '../services/api';
 
@@ -67,27 +67,27 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({} as IAuthState);
   }, []);
 
-  /* When the token is expired obligate a sign-out action */
-  useEffect(() => {
-    const interceptor = api.interceptors.response.use(
-      (res) => res,
-      (err) => {
-        const url = new URL(err.config.url, err.config.baseURL);
+  // /* When the token is expired obligate a sign-out action */
+  // useEffect(() => {
+  //   const interceptor = api.interceptors.response.use(
+  //     (res) => res,
+  //     (err) => {
+  //       const url = new URL(err.config.url, err.config.baseURL);
 
-        if (err.response.status === 401 && url.pathname !== '/signin') {
-          toast.error('Sua sessão expirou, faça login novamente.');
+  //       if (err.response.status === 401 && url.pathname !== '/signin') {
+  //         toast.error('Sua sessão expirou, faça login novamente.');
 
-          signOut();
-        }
+  //         signOut();
+  //       }
 
-        return Promise.reject(err);
-      },
-    );
+  //       return Promise.reject(err);
+  //     },
+  //   );
 
-    return () => {
-      api.interceptors.response.eject(interceptor);
-    };
-  }, [signOut]);
+  //   return () => {
+  //     api.interceptors.response.eject(interceptor);
+  //   };
+  // }, [signOut]);
 
   return (
     <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>

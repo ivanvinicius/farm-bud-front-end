@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import api from '../../services/api';
+import { useTableContext } from '../../hooks/table';
 
 import GlobalInputFilter from './GlobalInputFilter';
 import IndeterminateInput from './IndeterminateInput';
@@ -28,9 +29,8 @@ import {
 } from './styles';
 
 interface ITableProps {
-  data: Array<{}>;
-  loadingData: boolean;
-  columns: Column[];
+  tableHeaderColumns: Column[];
+  hidedColumns?: Array<string>;
   actions?: {
     create?: {
       url: string;
@@ -46,21 +46,19 @@ interface ITableProps {
       url: string;
     };
   };
-  hideColumns?: Array<string>;
 }
 
 const Table: React.FC<ITableProps> = ({
-  data,
-  loadingData,
-  columns,
-  hideColumns,
+  tableHeaderColumns,
+  hidedColumns,
   actions,
 }) => {
-  const [buttonCRUDisabled, setButtonCRUDisabled] = useState(true); // CRU means Create, Read and Update
+  const { data, setData } = useTableContext();
+  const history = useHistory();
+  const [itemsToDelete, setItemsToDelete] = useState<Array<string>>([]);
+  const [buttonCRUDisabled, setButtonCRUDisabled] = useState(true);
   const [buttonDeleteDisabled, setButtonDeleteDisabled] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [itemsToDelete, setItemsToDelete] = useState<Array<string>>([]);
-  const history = useHistory();
 
   const {
     getTableProps,
@@ -80,11 +78,11 @@ const Table: React.FC<ITableProps> = ({
     state: { pageIndex, globalFilter, selectedRowIds },
   } = useTable(
     {
-      columns,
+      columns: tableHeaderColumns,
       data,
       initialState: {
         pageIndex: 0,
-        hiddenColumns: hideColumns || [],
+        hiddenColumns: hidedColumns || [],
       },
     },
     useGlobalFilter,
@@ -120,38 +118,17 @@ const Table: React.FC<ITableProps> = ({
     setModalIsOpen((state) => !state);
   }, []);
 
-  const infoMessage = useMemo(() => {
-    let message = '';
-
-    loadingData
-      ? (message = 'Carregando itens...')
-      : (message = 'Nenhum item foi encontrado!');
-
-    return message;
-  }, [loadingData]);
-
   const calculateColspan = useMemo((): number => {
     let size = 0;
 
-    if (!hideColumns) {
-      size = columns.length + 1;
+    if (!hidedColumns) {
+      size = tableHeaderColumns.length + 1;
     } else {
-      size = columns.length - hideColumns.length + 1;
+      size = tableHeaderColumns.length - hidedColumns.length + 1;
     }
 
     return size;
-  }, [columns, hideColumns]);
-
-  const modalMessage = useMemo(() => {
-    let message = '';
-    const { length } = Object.keys(selectedRowIds);
-
-    length > 1
-      ? (message = `Você tem certeza que deseja excluir os ${length} produtos selecionados?`)
-      : (message = `Você tem certeza que deseja excluir o produto selecionado?`);
-
-    return message;
-  }, [selectedRowIds]);
+  }, [tableHeaderColumns, hidedColumns]);
 
   useMemo(() => {
     setButtonCRUDisabled(Object.keys(selectedRowIds).length !== 1);
@@ -183,25 +160,33 @@ const Table: React.FC<ITableProps> = ({
     });
   }, [history, actions, selectedFlatRows]);
 
-  const handleActionDelete = useCallback(() => {
+  const handleActionDelete = useCallback(async () => {
     try {
-      const column = actions?.delete?.columnNameAccessor;
+      const columnAccessor = actions?.delete?.columnNameAccessor;
 
-      if (column) {
-        api.delete(`/products-measures`, { data: { ids: itemsToDelete } });
+      if (columnAccessor) {
+        const response = await api.delete(`${actions?.delete?.url}`, {
+          data: { ids: itemsToDelete },
+        });
 
-        // const dataFiltered = data.filter((item: any) => {
-        //   return !itemsToDelete.includes(item[column]);
-        // });
+        if (!response) {
+          throw new Error();
+        }
 
-        toast.error('Terminar o método da forma correta.');
+        const dataFiltered = data.filter((item: any) => {
+          return !itemsToDelete.includes(item[columnAccessor]);
+        });
+
+        setData(dataFiltered);
+
+        toast.success('Exclusão realizada.');
       }
     } catch (err) {
       toast.error('Ocorreu um erro durante a exclusão.');
     }
 
     handleToggleModal();
-  }, [handleToggleModal, itemsToDelete, actions]);
+  }, [handleToggleModal, itemsToDelete, actions, setData, data]);
 
   const handleActionDetail = useCallback(() => {
     alert('detail'); //eslint-disable-line
@@ -211,7 +196,10 @@ const Table: React.FC<ITableProps> = ({
     <Container>
       <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
         <ModalContent>
-          <span>{modalMessage}</span>
+          <span>
+            Você está prestes a realizar a exclusão de produtos, tem certeza que
+            deseja continuar?
+          </span>
 
           <div>
             <button type="button" onClick={() => handleActionDelete()}>
@@ -296,7 +284,7 @@ const Table: React.FC<ITableProps> = ({
               );
             })) || (
             <tr>
-              <td colSpan={calculateColspan}>{infoMessage}</td>
+              <td colSpan={calculateColspan}>Nenhum item foi encontrado!</td>
             </tr>
           )}
         </tbody>

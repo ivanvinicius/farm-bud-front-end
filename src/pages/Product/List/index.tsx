@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Column } from 'react-table';
 
 import api from '../../../services/api';
+import { useTableContext } from '../../../hooks/table';
 
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
@@ -11,10 +12,9 @@ import IProductsProps from '../../../dtos/Product/IProductsProps';
 import { Container } from './styles';
 
 const ListProducts: React.FC = () => {
-  const [products, setProducts] = useState<IProductsProps[]>([]);
-  const [loadingData, setLoadingData] = useState(false);
+  const { setData } = useTableContext();
 
-  const tableColumns = useMemo(
+  const headerColumns = useMemo(
     (): Column[] => [
       {
         Header: 'Produto',
@@ -58,21 +58,17 @@ const ListProducts: React.FC = () => {
     [],
   );
 
-  const hideTableColumns = useMemo(
+  const hideColumns = useMemo(
     () => ['product_id', 'brand_id', 'category_id', 'subcategory_id'],
     [],
   );
 
   const tableActions = useMemo(
-    () => ({
-      create: { url: '/create-product-measure' },
-    }),
+    () => ({ create: { url: '/create-product-measure' } }),
     [],
   );
 
   useEffect(() => {
-    setLoadingData(true);
-
     api.get('products').then((response) => {
       const formattedProducts = response.data.map((item: IProductsProps) => ({
         ...item,
@@ -81,20 +77,17 @@ const ListProducts: React.FC = () => {
           : item.product_composition,
       }));
 
-      setProducts(formattedProducts);
-      setLoadingData(false);
+      setData(formattedProducts);
     });
-  }, []);
+  }, [setData]);
 
   return (
     <Container>
       <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
 
       <Table
-        data={[...products]}
-        columns={tableColumns}
-        hideColumns={hideTableColumns}
-        loadingData={loadingData}
+        tableHeaderColumns={headerColumns}
+        hidedColumns={hideColumns}
         actions={tableActions}
       />
     </Container>
