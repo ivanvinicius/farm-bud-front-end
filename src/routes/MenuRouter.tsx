@@ -3,15 +3,11 @@ import { Switch } from 'react-router-dom';
 
 import Route from './Route';
 
-import Dashboard from '../pages/Menu/Dashboard';
-import Product from '../pages/Menu/Product';
-import Composition from '../pages/Menu/Composition';
+import Dashboard from '../pages/Dashboard';
 
 const MenuRouter: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Dashboard} isPrivate />
-    <Route path="/products-menu" component={Product} isPrivate />
-    <Route path="/compositions-menu" component={Composition} isPrivate />
   </Switch>
 );
 

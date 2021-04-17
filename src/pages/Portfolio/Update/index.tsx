@@ -13,57 +13,54 @@ import Button from '../../../components/Button';
 import Select from '../../../components/Select';
 import CurrencyInput from '../../../components/CurrencyInput';
 import VolumetricInput from '../../../components/VolumetricInput';
-import IProductMeasureProps from '../../../dtos/ProductMeasure/IProductMeasureProps';
-import IMeasureProps from '../../../dtos/Measure/IMeasureProps';
+import IPortfolioProps from '../../../dtos/IPortfolioProps';
+import IMeasureProps from '../../../dtos/IMeasureProps';
 import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Content, InfoRow, CategoryRow, VolumeRow } from './styles';
+import formatToNumeric from '../../../utils/formatToNumeric';
 
 interface ILocationProps {
-  item: IProductMeasureProps;
+  item: IPortfolioProps;
 }
 
 interface IFormSubmitProps {
   measure: string;
-  volume: string;
+  size: string;
   price: string;
 }
 
-const CreateProductMeasure: React.FC = () => {
+const UpdateProductMeasure: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
   const [measures, setMeasures] = useState<ISelectOption[]>([]);
 
   const handleFormSubmit = useCallback(
-    async ({ volume, measure, price }: IFormSubmitProps) => {
+    async ({ size, measure, price }: IFormSubmitProps) => {
       try {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          volume: Yup.string().required('Informe o volume'),
+          size: Yup.string().required('Informe o tamanho.'),
           measure: Yup.string().required('Informe a unidade de medida.'),
-          price: Yup.string().required('Informe o valor'),
+          price: Yup.string().required('Informe o valor.'),
         });
 
-        await schema.validate(
-          { measure, volume, price },
-          { abortEarly: false },
-        );
+        await schema.validate({ measure, size, price }, { abortEarly: false });
 
         const formattedData = {
-          id: item.productmeasure_id,
-          product_id: item.productmeasure_product_id,
+          id: item.id,
           measure_id: measure,
-          volume,
-          price,
+          price: formatToNumeric(price),
+          size: formatToNumeric(size),
         };
 
-        await api.patch('/products-measures', formattedData);
+        await api.put('/portfolios', formattedData);
 
         toast.success('Atualização realizada.');
 
-        history.push('/products-measures');
+        history.push('/portfolio');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const formattedErrors = getValidationErrors(err);
@@ -82,7 +79,7 @@ const CreateProductMeasure: React.FC = () => {
   useEffect(() => {
     const formattedMeasures: ISelectOption[] = [];
 
-    api.get(`/measures/1`).then((response: any) => { //eslint-disable-line
+    api.get(`/measures`).then((response: any) => { //eslint-disable-line
       response.data.map(({ id, name }: IMeasureProps) => {
         return formattedMeasures.push({ value: id, label: name });
       });
@@ -93,27 +90,24 @@ const CreateProductMeasure: React.FC = () => {
 
   return (
     <>
-      <Header
-        urlBack="/products-measures"
-        headerTitle="Atualizar Informações"
-      />
+      <Header urlBack="/portfolio" headerTitle="Atualizar Informações" />
 
       <Content>
         <Form
           ref={formRef}
           onSubmit={handleFormSubmit}
           initialData={{
-            name: item.productmeasure_product_name,
-            brand: item.productmeasure_product_brand_name,
-            category: item.productmeasure_product_subcategory_category_name,
-            subcategory: item.productmeasure_product_subcategory_name,
-            composition: item.productmeasure_product_composition,
+            name: item.product_name,
+            brand: item.brand_name,
+            category: item.category_name,
+            subcategory: item.subcategory_name,
+            composition: item.product_composition,
             measure: {
-              label: item.productmeasure_measure_name,
-              value: item.productmeasure_measure_id,
+              label: item.measure_name,
+              value: item.measure_id,
             },
-            volume: item.productmeasure_volume,
-            price: item.productmeasure_price,
+            size: item.size,
+            price: item.price,
           }}
         >
           <InfoRow>
@@ -144,9 +138,9 @@ const CreateProductMeasure: React.FC = () => {
           </CategoryRow>
           <VolumeRow>
             <div>
-              <label>Volume</label>
+              <label>Tamanho</label>
               <VolumetricInput
-                name="volume"
+                name="size"
                 placeholder="50,00"
                 decimalSeparator=","
                 groupSeparator="."
@@ -180,4 +174,4 @@ const CreateProductMeasure: React.FC = () => {
   );
 };
 
-export default CreateProductMeasure;
+export default UpdateProductMeasure;

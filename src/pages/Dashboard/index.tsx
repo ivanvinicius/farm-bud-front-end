@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaBoxes } from 'react-icons/fa';
 import { GiCorkedTube } from 'react-icons/gi';
 
-import Header from '../../../components/Header';
+import Header from '../../components/Header';
 
 import { Container, Menu, Info } from './styles';
 
@@ -13,17 +13,16 @@ const Dashboard: React.FC = () => {
       <Header />
 
       <Menu>
-        <Link to="/products-menu">
+        <Link to="/portfolio">
           <FaBoxes size={100} />
           <Info>
-            <strong>Produtos</strong>
+            <strong>Portfólio</strong>
             <span>
-              Cadastre, liste e altere os produtos deste estabelecimento.
+              Cadastre e altere os produtos do portfólio deste estabelecimento.
             </span>
           </Info>
         </Link>
 
-        {/* <Link to="/compositions-menu"> */}
         <Link to="/#">
           <GiCorkedTube size={100} />
           <Info>

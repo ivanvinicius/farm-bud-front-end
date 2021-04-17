@@ -7,7 +7,7 @@ import { useTableContext } from '../../../hooks/table';
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
 
-import IProductsProps from '../../../dtos/Product/IProductsProps';
+import IProductsProps from '../../../dtos/IProductsProps';
 
 import { Container } from './styles';
 
@@ -18,7 +18,7 @@ const ListProducts: React.FC = () => {
     (): Column[] => [
       {
         Header: 'Produto',
-        accessor: 'product_name',
+        accessor: 'name',
       },
       {
         Header: 'Marca',
@@ -35,12 +35,12 @@ const ListProducts: React.FC = () => {
       },
       {
         Header: 'Composição',
-        accessor: 'product_composition',
+        accessor: 'composition',
       },
 
       {
         Header: 'ID',
-        accessor: 'product_id',
+        accessor: 'id',
       },
       {
         Header: 'ID Marca',
@@ -59,12 +59,12 @@ const ListProducts: React.FC = () => {
   );
 
   const hideColumns = useMemo(
-    () => ['product_id', 'brand_id', 'category_id', 'subcategory_id'],
+    () => ['id', 'brand_id', 'category_id', 'subcategory_id'],
     [],
   );
 
   const tableActions = useMemo(
-    () => ({ create: { url: '/create-product-measure' } }),
+    () => ({ create: { url: '/create-portfolio' } }),
     [],
   );
 
@@ -72,9 +72,7 @@ const ListProducts: React.FC = () => {
     api.get('products').then((response) => {
       const formattedProducts = response.data.map((item: IProductsProps) => ({
         ...item,
-        product_composition: !item.product_composition
-          ? 'Não contém'
-          : item.product_composition,
+        composition: !item.composition ? 'Não contém' : item.composition,
       }));
 
       setData(formattedProducts);
@@ -83,7 +81,7 @@ const ListProducts: React.FC = () => {
 
   return (
     <Container>
-      <Header urlBack="/products-menu" headerTitle="Selecione um Produto" />
+      <Header urlBack="/portfolio" headerTitle="Produtos" />
 
       <Table
         tableHeaderColumns={headerColumns}

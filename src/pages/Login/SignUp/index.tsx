@@ -22,10 +22,11 @@ import ISelectOption from '../../../dtos/ISelectOption';
 
 interface IResponseAPI {
   id: string;
+  parent_id: string;
   name: string;
 }
 
-interface ISingUpFormData {
+interface ISignUpFormData {
   name: string;
   email: string;
   password: string;
@@ -77,7 +78,7 @@ const SignUp: React.FC = () => {
   }, []);
 
   const handleSubmitForm = useCallback(
-    async ({ name, email, password, state, city }: ISingUpFormData) => {
+    async ({ name, email, password, state, city }: ISignUpFormData) => {
       try {
         formRef.current?.setErrors({});
 
@@ -95,7 +96,7 @@ const SignUp: React.FC = () => {
         );
 
         await api.post('/providers', {
-          city_id: city,
+          address_id: city,
           name,
           email,
           password,
