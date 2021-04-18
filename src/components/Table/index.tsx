@@ -33,17 +33,17 @@ interface ITableProps {
   hidedColumns?: Array<string>;
   actions?: {
     create?: {
-      url: string;
+      pageURL: string;
     };
     update?: {
-      url: string;
+      pageURL: string;
     };
     delete?: {
-      url: string;
+      apiURL: string;
       columnNameAccessor: string;
     };
     detail?: {
-      url: string;
+      pageURL: string;
     };
   };
 }
@@ -149,13 +149,13 @@ const Table: React.FC<ITableProps> = ({
   }, [selectedFlatRows, actions]);
 
   const handleActionCreate = useCallback(() => {
-    return history.push(`${actions?.create?.url}`, {
+    return history.push(`${actions?.create?.pageURL}`, {
       item: selectedFlatRows[0]?.original,
     });
   }, [history, actions, selectedFlatRows]);
 
   const handleActionUpdate = useCallback(() => {
-    return history.push(`${actions?.update?.url}`, {
+    return history.push(`${actions?.update?.pageURL}`, {
       item: selectedFlatRows[0]?.original,
     });
   }, [history, actions, selectedFlatRows]);
@@ -165,7 +165,7 @@ const Table: React.FC<ITableProps> = ({
       const columnAccessor = actions?.delete?.columnNameAccessor;
 
       if (columnAccessor) {
-        const response = await api.delete(`${actions?.delete?.url}`, {
+        const response = await api.delete(`${actions?.delete?.apiURL}`, {
           data: { ids: itemsToDelete },
         });
 

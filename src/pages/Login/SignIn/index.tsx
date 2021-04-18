@@ -9,7 +9,6 @@ import { FiMail, FiLock } from 'react-icons/fi';
 
 import getValidationErrors from '../../../utils/getValidationErrors';
 import { useAuth } from '../../../hooks/auth';
-
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
@@ -31,8 +30,8 @@ const SignIn: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          email: Yup.string().email().required('Informe o email'),
-          password: Yup.string().min(6, 'No mínimo 6 digitos'),
+          email: Yup.string().email().required('Informe o email.'),
+          password: Yup.string().min(6, 'No mínimo 6 digitos.'),
         });
 
         await schema.validate({ email, password }, { abortEarly: false });
@@ -49,7 +48,13 @@ const SignIn: React.FC = () => {
           return;
         }
 
-        toast.error('Cheche suas credenciais.');
+        if (err.message === 'Network Error') {
+          toast.error('Não há conexão com a API');
+
+          return;
+        }
+
+        toast.error('Cheque suas credenciais');
       }
     },
     [signIn, history],

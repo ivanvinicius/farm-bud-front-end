@@ -114,6 +114,12 @@ const SignUp: React.FC = () => {
           return;
         }
 
+        if (err.message === 'Network Error') {
+          toast.error('Não há conexão com a API');
+
+          return;
+        }
+
         toast.error('Não foi possível realizar o cadastro.');
       }
     },

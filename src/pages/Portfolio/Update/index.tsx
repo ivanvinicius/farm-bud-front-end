@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -6,19 +6,18 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
+import formatToNumeric from '../../../utils/formatToNumeric';
 import getValidationErrors from '../../../utils/getValidationErrors';
 import Header from '../../../components/Header';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Select from '../../../components/Select';
-import CurrencyInput from '../../../components/CurrencyInput';
-import VolumetricInput from '../../../components/VolumetricInput';
+import NumericInput from '../../../components/NumericInput';
+import { useMeasureContext } from '../../../hooks/measure';
+
 import IPortfolioProps from '../../../dtos/IPortfolioProps';
-import IMeasureProps from '../../../dtos/IMeasureProps';
-import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Content, InfoRow, CategoryRow, VolumeRow } from './styles';
-import formatToNumeric from '../../../utils/formatToNumeric';
 
 interface ILocationProps {
   item: IPortfolioProps;
@@ -34,7 +33,7 @@ const UpdateProductMeasure: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
-  const [measures, setMeasures] = useState<ISelectOption[]>([]);
+  const { measures } = useMeasureContext();
 
   const handleFormSubmit = useCallback(
     async ({ size, measure, price }: IFormSubmitProps) => {
@@ -70,27 +69,24 @@ const UpdateProductMeasure: React.FC = () => {
           return;
         }
 
+        if (err.message === 'Network Error') {
+          toast.error('Não há conexão com a API');
+
+          return;
+        }
+
         toast.error('Não foi possível atualizar as informações.');
       }
     },
     [item, history],
   );
 
-  useEffect(() => {
-    const formattedMeasures: ISelectOption[] = [];
-
-    api.get(`/measures`).then((response: any) => { //eslint-disable-line
-      response.data.map(({ id, name }: IMeasureProps) => {
-        return formattedMeasures.push({ value: id, label: name });
-      });
-
-      setMeasures(formattedMeasures);
-    });
-  }, []);
-
   return (
     <>
-      <Header urlBack="/portfolio" headerTitle="Atualizar Informações" />
+      <Header
+        urlBack="/portfolio"
+        headerTitle="Atualizar Informações do Produto"
+      />
 
       <Content>
         <Form
@@ -139,7 +135,7 @@ const UpdateProductMeasure: React.FC = () => {
           <VolumeRow>
             <div>
               <label>Tamanho</label>
-              <VolumetricInput
+              <NumericInput
                 name="size"
                 placeholder="50,00"
                 decimalSeparator=","
@@ -155,7 +151,7 @@ const UpdateProductMeasure: React.FC = () => {
             </div>
             <div>
               <label>Valor</label>
-              <CurrencyInput
+              <NumericInput
                 name="price"
                 placeholder="130,00"
                 decimalSeparator=","

@@ -2,12 +2,15 @@ import React from 'react';
 
 import { AuthProvider } from './auth';
 import { TableProvider } from './table';
+import { MeasureProvider } from './measure';
 
 const AppProvider: React.FC = ({ children }) => {
   return (
     <>
       <AuthProvider>
-        <TableProvider>{children}</TableProvider>
+        <MeasureProvider>
+          <TableProvider>{children}</TableProvider>
+        </MeasureProvider>
       </AuthProvider>
     </>
   );

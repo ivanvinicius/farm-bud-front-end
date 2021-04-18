@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiArrowLeft, FiPower } from 'react-icons/fi';
+import { FiArrowLeft, FiPower, FiHelpCircle } from 'react-icons/fi';
 
 import { useAuth } from '../../hooks/auth';
 import Modal from '../Modal';
@@ -59,7 +59,7 @@ const Header: React.FC<IHeaderProps> = ({
           <BackLinkArea>
             <Link to={urlBack}>
               <FiArrowLeft size={22} />
-              voltar
+              Voltar
             </Link>
           </BackLinkArea>
 
@@ -70,9 +70,14 @@ const Header: React.FC<IHeaderProps> = ({
           )}
 
           <SignOutArea>
+            <Link to="help">
+              <FiHelpCircle size={22} />
+              Ajuda
+            </Link>
+
             <button type="button" onClick={handleToggleModal}>
-              sair
               <FiPower size={20} />
+              Sair
             </button>
           </SignOutArea>
         </HeaderContent>

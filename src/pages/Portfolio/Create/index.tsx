@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -6,17 +6,15 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
+import formatToNumeric from '../../../utils/formatToNumeric';
 import getValidationErrors from '../../../utils/getValidationErrors';
 import Header from '../../../components/Header';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Select from '../../../components/Select';
-import CurrencyInput from '../../../components/CurrencyInput';
-import VolumetricInput from '../../../components/VolumetricInput';
-
+import NumericInput from '../../../components/NumericInput';
+import { useMeasureContext } from '../../../hooks/measure';
 import IProductProps from '../../../dtos/IProductsProps';
-import IMeasureProps from '../../../dtos/IMeasureProps';
-import ISelectOption from '../../../dtos/ISelectOption';
 
 import { Container, Content, InfoRow, CategoryRow, VolumeRow } from './styles';
 
@@ -26,27 +24,15 @@ interface ILocationProps {
 
 interface IFormSubmitProps {
   measure: string;
-  size: number;
-  price: number;
+  size: string;
+  price: string;
 }
 
 const CreateProductMeasure: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
-  const [measures, setMeasures] = useState<ISelectOption[]>([]);
-
-  useEffect(() => {
-    const formattedMeasures: ISelectOption[] = [];
-
-    api.get(`/measures`).then((response: any) => { //eslint-disable-line
-      response.data.map(({ id, name }: IMeasureProps) => {
-        return formattedMeasures.push({ value: id, label: name });
-      });
-
-      setMeasures(formattedMeasures);
-    });
-  }, []);
+  const { measures } = useMeasureContext();
 
   const handleFormSubmit = useCallback(
     async ({ measure, size, price }: IFormSubmitProps) => {
@@ -64,8 +50,8 @@ const CreateProductMeasure: React.FC = () => {
         const formattedData = {
           product_id: item.id,
           measure_id: measure,
-          size,
-          price,
+          price: formatToNumeric(price),
+          size: formatToNumeric(size),
         };
 
         await api.post('/portfolios', formattedData);
@@ -82,6 +68,12 @@ const CreateProductMeasure: React.FC = () => {
           return;
         }
 
+        if (err.message === 'Network Error') {
+          toast.error('Não há conexão com a API');
+
+          return;
+        }
+
         toast.error('Não foi possível realizar o cadastro.');
       }
     },
@@ -90,7 +82,10 @@ const CreateProductMeasure: React.FC = () => {
 
   return (
     <Container>
-      <Header urlBack="/products" headerTitle="Finalize o Cadastro" />
+      <Header
+        urlBack="/products"
+        headerTitle="Finalizar Cadastro do Produto no Portfólio"
+      />
 
       <Content>
         <Form
@@ -133,7 +128,7 @@ const CreateProductMeasure: React.FC = () => {
           <VolumeRow>
             <div>
               <label>Tamanho</label>
-              <VolumetricInput
+              <NumericInput
                 name="size"
                 placeholder="50,00"
                 decimalSeparator=","
@@ -149,7 +144,7 @@ const CreateProductMeasure: React.FC = () => {
             </div>
             <div>
               <label>Valor</label>
-              <CurrencyInput
+              <NumericInput
                 name="price"
                 placeholder="R$ 10,00"
                 prefix="R$ "

@@ -58,16 +58,6 @@ const ListProducts: React.FC = () => {
     [],
   );
 
-  const hideColumns = useMemo(
-    () => ['id', 'brand_id', 'category_id', 'subcategory_id'],
-    [],
-  );
-
-  const tableActions = useMemo(
-    () => ({ create: { url: '/create-portfolio' } }),
-    [],
-  );
-
   useEffect(() => {
     api.get('products').then((response) => {
       const formattedProducts = response.data.map((item: IProductsProps) => ({
@@ -81,12 +71,15 @@ const ListProducts: React.FC = () => {
 
   return (
     <Container>
-      <Header urlBack="/portfolio" headerTitle="Produtos" />
+      <Header
+        urlBack="/portfolio"
+        headerTitle="Listagem Padronizada de Produtos"
+      />
 
       <Table
         tableHeaderColumns={headerColumns}
-        hidedColumns={hideColumns}
-        actions={tableActions}
+        hidedColumns={['id', 'brand_id', 'category_id', 'subcategory_id']}
+        actions={{ create: { pageURL: '/create-portfolio' } }}
       />
     </Container>
   );

@@ -5,10 +5,8 @@ import { Link } from 'react-router-dom';
 import api from '../../../services/api';
 import formatToStringBRL from '../../../utils/formatToStringBRL';
 import { useTableContext } from '../../../hooks/table';
-
 import Header from '../../../components/Header';
 import Table from '../../../components/Table';
-
 import IPortfolioProps from '../../../dtos/IPortfolioProps';
 
 import { Container, AddProductsContainer } from './styles';
@@ -103,48 +101,39 @@ const ListPortfolio: React.FC = () => {
     [],
   );
 
-  const hideColumns = useMemo(
-    () => [
-      'id',
-      'provider_id',
-      'product_id',
-      'measure_id',
-      'subcategory_id',
-      'brand_id',
-      'category_id',
-      'measure_name',
-    ],
-    [],
-  );
-
-  const tableActions = useMemo(
-    () => ({
-      update: {
-        url: '/update-portfolio',
-      },
-
-      delete: {
-        url: '/portfolio',
-        columnNameAccessor: 'id',
-      },
-    }),
-    [],
-  );
-
   return (
     <Container>
-      <Header urlBack="/" headerTitle="Portfólio" />
+      <Header
+        urlBack="/"
+        headerTitle="Portfólio de Produtos do Estabelecimento"
+      />
 
       <AddProductsContainer>
         <strong>Adicionar produto ao portfólio</strong>
-
         <Link to="/products">Adicionar</Link>
       </AddProductsContainer>
 
       <Table
         tableHeaderColumns={headerColumns}
-        hidedColumns={hideColumns}
-        actions={tableActions}
+        hidedColumns={[
+          'id',
+          'provider_id',
+          'product_id',
+          'measure_id',
+          'subcategory_id',
+          'brand_id',
+          'category_id',
+          'measure_name',
+        ]}
+        actions={{
+          update: {
+            pageURL: '/update-portfolio',
+          },
+          delete: {
+            apiURL: '/portfolios',
+            columnNameAccessor: 'id',
+          },
+        }}
       />
     </Container>
   );

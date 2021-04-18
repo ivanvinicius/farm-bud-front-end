@@ -1,19 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useField } from '@unform/core';
 
-import VolumetricInputField from 'react-currency-input-field';
-import { CurrencyInputProps as VolumetricInputProps } from 'react-currency-input-field/dist/components/CurrencyInputProps';
+import CurrencyInput from 'react-currency-input-field';
+import { CurrencyInputProps } from 'react-currency-input-field/dist/components/CurrencyInputProps';
 
 import { Container } from './styles';
 
-interface IVolumetricInputProps extends VolumetricInputProps {
+interface INumericInputProps extends CurrencyInputProps {
   name: string;
 }
 
-const VolumetricInput: React.FC<IVolumetricInputProps> = ({
-  name,
-  ...rest
-}) => {
+const NumericInput: React.FC<INumericInputProps> = ({ name, ...rest }) => {
   const { registerField, fieldName, error, defaultValue } = useField(name);
   const inputRef = useRef({ value: defaultValue });
   const [inputValue, setInputValue] = useState(defaultValue);
@@ -51,7 +48,7 @@ const VolumetricInput: React.FC<IVolumetricInputProps> = ({
 
   return (
     <Container hasError={!!error} isFocused={isFocused} isFilled={isFilled}>
-      <VolumetricInputField
+      <CurrencyInput
         name={name}
         defaultValue={defaultValue}
         value={inputValue}
@@ -64,4 +61,4 @@ const VolumetricInput: React.FC<IVolumetricInputProps> = ({
   );
 };
 
-export default VolumetricInput;
+export default NumericInput;
