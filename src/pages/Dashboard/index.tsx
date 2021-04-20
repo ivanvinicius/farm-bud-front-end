@@ -1,22 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBoxes } from 'react-icons/fa';
 import { GiCorkedTube } from 'react-icons/gi';
 
 import Header from '../../components/Header';
-import { useMeasureContext } from '../../hooks/measure';
 
 import { Container, Menu, Info } from './styles';
 
 const Dashboard: React.FC = () => {
-  const { measures, setMeasures } = useMeasureContext();
-
-  useEffect(() => {
-    if (measures.length === 0) {
-      setMeasures();
-    }
-  }, [measures, setMeasures]);
-
   return (
     <Container>
       <Header />

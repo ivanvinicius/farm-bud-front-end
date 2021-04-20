@@ -17,21 +17,16 @@ const ListProducts: React.FC = () => {
   const headerColumns = useMemo(
     (): Column[] => [
       {
+        Header: 'Marca',
+        accessor: 'brand_name',
+      },
+      {
         Header: 'Produto',
         accessor: 'name',
       },
       {
-        Header: 'Marca',
-        accessor: 'brand_name',
-      },
-
-      {
         Header: 'Categoria',
-        accessor: 'category_name',
-      },
-      {
-        Header: 'Subcategoria',
-        accessor: 'subcategory_name',
+        accessor: 'formatted_category',
       },
       {
         Header: 'Composição',
@@ -54,6 +49,10 @@ const ListProducts: React.FC = () => {
         Header: 'ID Subcategoria',
         accessor: 'subcategory_id',
       },
+      {
+        Header: 'Subcategoria',
+        accessor: 'subcategory_name',
+      },
     ],
     [],
   );
@@ -62,7 +61,10 @@ const ListProducts: React.FC = () => {
     api.get('products').then((response) => {
       const formattedProducts = response.data.map((item: IProductsProps) => ({
         ...item,
-        composition: !item.composition ? 'Não contém' : item.composition,
+        composition: !item.composition ? 'Não informado' : item.composition,
+        formatted_category: `${item.category_name.substring(0, 4)}. ${
+          item.subcategory_name
+        }`,
       }));
 
       setData(formattedProducts);
@@ -78,7 +80,14 @@ const ListProducts: React.FC = () => {
 
       <Table
         tableHeaderColumns={headerColumns}
-        hidedColumns={['id', 'brand_id', 'category_id', 'subcategory_id']}
+        hidedColumns={[
+          'id',
+          'brand_id',
+          'category_id',
+          'subcategory_id',
+          'category_name',
+          'subcategory_name',
+        ]}
         actions={{ create: { pageURL: '/create-portfolio' } }}
       />
     </Container>

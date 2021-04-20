@@ -16,4 +16,5 @@ export default interface IPortfolioProps {
   category_name: string;
   subcategory_id: string;
   subcategory_name: string;
+  formatted_category: string | null;
 }

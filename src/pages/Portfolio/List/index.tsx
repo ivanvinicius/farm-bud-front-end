@@ -23,9 +23,13 @@ const ListPortfolio: React.FC = () => {
         formatted_price: `R$ ${formatToStringBRL(item.price)}`,
         formatted_size: `${formatToStringBRL(item.size)} ${item.measure_name}`,
 
+        formatted_category: `${item.category_name.substring(0, 4)}. ${
+          item.subcategory_name
+        }`,
+
         product_composition:
           item.product_composition === null
-            ? 'Não contém'
+            ? 'Não informado'
             : item.product_composition,
       }));
 
@@ -40,24 +44,24 @@ const ListPortfolio: React.FC = () => {
         accessor: 'id',
       },
       {
-        Header: 'Produto',
-        accessor: 'product_name',
-      },
-      {
-        Header: 'Valor',
-        accessor: 'formatted_price',
-      },
-      {
         Header: 'Marca',
         accessor: 'brand_name',
+      },
+      {
+        Header: 'Produto',
+        accessor: 'product_name',
       },
       {
         Header: 'Tamanho',
         accessor: 'formatted_size',
       },
       {
+        Header: 'Valor',
+        accessor: 'formatted_price',
+      },
+      {
         Header: 'Categoria',
-        accessor: 'category_name',
+        accessor: 'formatted_category',
       },
       {
         Header: 'Subcategoria',
@@ -124,6 +128,8 @@ const ListPortfolio: React.FC = () => {
           'brand_id',
           'category_id',
           'measure_name',
+          'category_name',
+          'subcategory_name',
         ]}
         actions={{
           update: {

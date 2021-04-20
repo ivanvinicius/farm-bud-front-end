@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -32,7 +32,9 @@ const CreateProductMeasure: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
-  const { measures } = useMeasureContext();
+  const { measures, getMeasures } = useMeasureContext();
+
+  useEffect(() => getMeasures(), [getMeasures]);
 
   const handleFormSubmit = useCallback(
     async ({ measure, size, price }: IFormSubmitProps) => {
@@ -58,7 +60,7 @@ const CreateProductMeasure: React.FC = () => {
 
         toast.success('Cadastro realizado.');
 
-        history.push('/portfolio');
+        history.push('/products');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const formattedErrors = getValidationErrors(err);

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -33,7 +33,9 @@ const UpdateProductMeasure: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
-  const { measures } = useMeasureContext();
+  const { measures, getMeasures } = useMeasureContext();
+
+  useEffect(() => getMeasures(), [getMeasures]);
 
   const handleFormSubmit = useCallback(
     async ({ size, measure, price }: IFormSubmitProps) => {

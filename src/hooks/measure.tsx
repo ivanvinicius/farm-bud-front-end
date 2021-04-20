@@ -8,7 +8,7 @@ import IMeasureProps from '../dtos/IMeasureProps';
 
 interface IContextData {
   measures: ISelectOption[];
-  setMeasures(): void;
+  getMeasures(): void;
 }
 
 const MeasureContext = createContext<IContextData>({} as IContextData);
@@ -16,20 +16,22 @@ const MeasureContext = createContext<IContextData>({} as IContextData);
 const MeasureProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<ISelectOption[]>([]);
 
-  const setMeasures = useCallback(() => {
-    const formattedMeasures: ISelectOption[] = [];
+  const getMeasures = useCallback(() => {
+    if (data.length === 0 || !data) {
+      const formattedMeasures: ISelectOption[] = [];
 
-    api.get(`/measures`).then((response: any) => {
-      response.data.map(({ id, name }: IMeasureProps) => {
-        return formattedMeasures.push({ value: id, label: name });
+      api.get(`/measures`).then((response: any) => {
+        response.data.map(({ id, name }: IMeasureProps) => {
+          return formattedMeasures.push({ value: id, label: name });
+        });
+
+        setData(formattedMeasures);
       });
-
-      setData(formattedMeasures);
-    });
-  }, []);
+    }
+  }, [data]);
 
   return (
-    <MeasureContext.Provider value={{ measures: data, setMeasures }}>
+    <MeasureContext.Provider value={{ measures: data, getMeasures }}>
       {children}
     </MeasureContext.Provider>
   );
