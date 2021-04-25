@@ -3,12 +3,13 @@ import React, { useMemo, ButtonHTMLAttributes } from 'react';
 import { Container } from './styles';
 
 interface IActionButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-  actionType: 'create' | 'update' | 'delete' | 'detail';
+  actionType: 'select' | 'create' | 'update' | 'delete' | 'detail';
 }
 
 const ActionButton: React.FC<IActionButton> = ({ actionType, ...rest }) => {
   const buttonDescription = useMemo(
     () => ({
+      select: 'Selecionar',
       create: 'Cadastrar',
       update: 'Atualizar',
       delete: 'Excluir',

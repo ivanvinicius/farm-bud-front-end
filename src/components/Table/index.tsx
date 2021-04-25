@@ -32,6 +32,14 @@ interface ITableProps {
   tableHeaderColumns: Column[];
   hidedColumns?: Array<string>;
   actions?: {
+    select?: {
+      pageURL: string;
+      others?: {
+        [key: string]: any;
+      };
+      buttonDisabled: boolean;
+    };
+
     create?: {
       pageURL: string;
     };
@@ -147,6 +155,21 @@ const Table: React.FC<ITableProps> = ({
 
     setItemsToDelete(selectedRows);
   }, [selectedFlatRows, actions]);
+
+  const handleActionSelect = useCallback(() => {
+    if (actions?.select?.pageURL) {
+      const items = selectedFlatRows.map((item) => {
+        return item.original;
+      });
+
+      return history.push(`${actions.select.pageURL}`, {
+        items,
+        others: actions.select.others,
+      });
+    }
+
+    return; //eslint-disable-line
+  }, [history, actions, selectedFlatRows]);
 
   const handleActionCreate = useCallback(() => {
     return history.push(`${actions?.create?.pageURL}`, {
@@ -291,6 +314,16 @@ const Table: React.FC<ITableProps> = ({
       </TableContent>
 
       <TableFooter>
+        {actions?.select && (
+          <ActionButton
+            disabled={
+              !(!actions?.select?.buttonDisabled && selectedFlatRows.length > 0)
+            }
+            onClick={() => handleActionSelect()}
+            actionType="select"
+          />
+        )}
+
         {actions?.create && (
           <ActionButton
             disabled={buttonCRUDisabled}
