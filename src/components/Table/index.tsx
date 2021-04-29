@@ -34,12 +34,11 @@ interface ITableProps {
   actions?: {
     select?: {
       pageURL: string;
-      others?: {
+      params?: {
         [key: string]: any;
       };
       buttonDisabled: boolean;
     };
-
     create?: {
       pageURL: string;
     };
@@ -164,11 +163,11 @@ const Table: React.FC<ITableProps> = ({
 
       return history.push(`${actions.select.pageURL}`, {
         items,
-        others: actions.select.others,
+        params: actions.select.params,
       });
     }
 
-    return; //eslint-disable-line
+    return undefined;
   }, [history, actions, selectedFlatRows]);
 
   const handleActionCreate = useCallback(() => {
@@ -212,8 +211,10 @@ const Table: React.FC<ITableProps> = ({
   }, [handleToggleModal, itemsToDelete, actions, setData, data]);
 
   const handleActionDetail = useCallback(() => {
-    alert('detail'); //eslint-disable-line
-  }, []);
+    return history.push(`${actions?.detail?.pageURL}`, {
+      item: selectedFlatRows[0]?.original,
+    });
+  }, [history, actions, selectedFlatRows]);
 
   return (
     <Container>

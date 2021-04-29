@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, {
   useCallback,
   useEffect,
@@ -18,7 +20,7 @@ import formatToStringBRL from '../../../utils/formatToStringBRL';
 import ISelectOption from '../../../dtos/ISelectOption';
 import Select from '../../../components/Select';
 
-import { Container, TopInfo } from './styles';
+import { Container, SelectContainer } from './styles';
 
 interface IProviderCompositionProps {
   culture_id: string;
@@ -33,67 +35,57 @@ interface IResponseAPI {
   name: string;
 }
 
+interface IResponseProductivityAPI {
+  productivity: string;
+}
+
 const CreateComposition1: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { setData } = useTableContext();
   const [cultures, setCultures] = useState<ISelectOption[]>([]);
   const [productivity, setProductivity] = useState<ISelectOption[]>([]);
-  const [cultureValue, setCultureValue] = useState();
-  const [productivityValue, setProducutivityValue] = useState();
+  const [inputSelectCulture, setInputSelectCulture] = useState();
+  const [inputSelectProductivity, setInputSelectProductivity] = useState();
 
-  useEffect(() => {
-    api.get('/cultures').then((response) => {
-      const formattedCultures: ISelectOption[] = [];
-
-      response.data.map(({ id, name }: IResponseAPI) => {
-        return formattedCultures.push({ value: id, label: name });
-      });
-
-      setCultures(formattedCultures);
-    });
+  const handleProductivityValue = useCallback(async (data: any) => {
+    setInputSelectProductivity(data);
   }, []);
 
-  const handleProductivityValue = useCallback(async (data: any) => { //eslint-disable-line
-    setProducutivityValue(data);
-  }, []);
-
-  const handleFindProductivity = useCallback(async (data: any) => { //eslint-disable-line
-    setCultureValue(data);
-
+  const handleFindProductivity = useCallback(async (data: any) => {
     const selectRef = formRef.current?.getFieldRef('productivity');
 
     selectRef.select.clearValue();
 
-    if (!data) {
-      setProductivity([]);
-    }
-
-    const { value } = data;
-    const formattedProductivity: ISelectOption[] = [];
+    setInputSelectCulture(data);
 
     const response = await api.get('/productivity', {
       params: {
-        culture_id: value,
+        culture_id: data.value,
       },
     });
 
     const responseItens: Array<number> = [];
+
+    response.data.map((item: IResponseProductivityAPI) =>
+      responseItens.push(Number(item.productivity)),
+    );
+
+    const formattedProductivity: ISelectOption[] = [];
+
     const productivityDescription = [
       'Baixa Produtividade',
       'Média Produtividade',
       'Alta Produtividade',
     ];
 
-    response.data.map((item: any) => responseItens.push(Number(item.productivity))); //eslint-disable-line
-
-    const available = [1, 2, 3].filter((item) => !responseItens.includes(item));
-
-    available.map((item) => {
-      return formattedProductivity.push({
-        value: String(item),
-        label: productivityDescription[item - 1],
+    [1, 2, 3]
+      .filter((item) => !responseItens.includes(item))
+      .map((item) => {
+        return formattedProductivity.push({
+          value: String(item),
+          label: productivityDescription[item - 1],
+        });
       });
-    });
 
     setProductivity(formattedProductivity);
   }, []);
@@ -120,6 +112,18 @@ const CreateComposition1: React.FC = () => {
       setData(formattedData);
     });
   }, [setData]);
+
+  useEffect(() => {
+    api.get('/cultures').then((response) => {
+      const formattedCultures: ISelectOption[] = [];
+
+      response.data.map(({ id, name }: IResponseAPI) => {
+        return formattedCultures.push({ value: id, label: name });
+      });
+
+      setCultures(formattedCultures);
+    });
+  }, []);
 
   const headerColumns = useMemo(
     (): Column[] => [
@@ -195,8 +199,9 @@ const CreateComposition1: React.FC = () => {
         urlBack="/composition"
         headerTitle="Selecione os Produtos Para a Composição"
       />
+
       <Form ref={formRef} onSubmit={() => ({})}>
-        <TopInfo>
+        <SelectContainer>
           <Select
             name="culture"
             options={cultures}
@@ -214,7 +219,7 @@ const CreateComposition1: React.FC = () => {
               return 'Todos os níveis de produtividade já foram cadastrados para a cultura selecionada.';
             }}
           />
-        </TopInfo>
+        </SelectContainer>
 
         <Table
           tableHeaderColumns={headerColumns}
@@ -233,11 +238,11 @@ const CreateComposition1: React.FC = () => {
           actions={{
             select: {
               pageURL: 'create-composition-step-2',
-              others: {
-                culture: cultureValue,
-                productivity: productivityValue,
+              params: {
+                culture: inputSelectCulture,
+                productivity: inputSelectProductivity,
               },
-              buttonDisabled: !cultureValue || !productivityValue,
+              buttonDisabled: !inputSelectCulture || !inputSelectProductivity,
             },
           }}
         />

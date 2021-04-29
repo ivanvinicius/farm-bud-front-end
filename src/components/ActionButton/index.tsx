@@ -13,7 +13,7 @@ const ActionButton: React.FC<IActionButton> = ({ actionType, ...rest }) => {
       create: 'Cadastrar',
       update: 'Atualizar',
       delete: 'Excluir',
-      detail: 'Visualizar',
+      detail: 'Ver Detalhes',
     }),
     [],
   );

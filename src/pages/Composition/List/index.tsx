@@ -22,7 +22,11 @@ const ListComposition: React.FC = () => {
 
   useEffect(() => {
     api.get('/providers-compositions').then((response) => {
-      const productivityInfo = ['Baixa', 'Média', 'Alta'];
+      const productivityInfo = [
+        'Produtividade Baixa',
+        'Produtividade Média',
+        'Produtividade Alta',
+      ];
 
       const formattedData = response.data.map(
         (item: IProviderCompositionProps) => ({
@@ -46,16 +50,19 @@ const ListComposition: React.FC = () => {
         accessor: 'provider_name',
       },
       {
+        Header: 'Cultura ID',
+        accessor: 'culture_id',
+      },
+      {
         Header: 'Cultura',
         accessor: 'culture_name',
       },
-
       {
         Header: 'Produtividade ID',
         accessor: 'productivity',
       },
       {
-        Header: 'Produtividade',
+        Header: 'Nível de Produtividade',
         accessor: 'productivity_description',
       },
     ],
@@ -70,8 +77,8 @@ const ListComposition: React.FC = () => {
       />
 
       <AddProductsContainer>
-        <strong>Criar nova composição de produtos</strong>
-        <Link to="/create-composition-step-1">Criar</Link>
+        <strong>Adicionar composição de produtos ao estabelecimento</strong>
+        <Link to="/create-composition-step-1">Adicionar</Link>
       </AddProductsContainer>
 
       <Table

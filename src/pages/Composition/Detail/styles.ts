@@ -1,6 +1,32 @@
 import styled from 'styled-components';
 
-export const FormContent = styled.div`
+export const HeaderInfo = styled.div`
+  width: 750px;
+  margin: 50px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 22px 30px;
+
+  border-radius: 8px;
+  background-color: var(--color-white);
+  box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.1);
+
+  div {
+    width: 40%;
+
+    &:first-child {
+      width: 60%;
+    }
+
+    strong {
+      color: var(--color-purple);
+    }
+  }
+`;
+
+export const List = styled.div`
   width: 750px;
   margin: 10px auto;
 
@@ -15,15 +41,11 @@ export const ItemOfList = styled.div`
   align-items: center;
 
   margin: 10px auto;
-  padding: 15px 30px;
+  padding: 22px 30px;
 
   border-radius: 8px;
   background-color: var(--color-white);
   box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.1);
-
-  &:first-child {
-    margin-top: 50px;
-  }
 `;
 
 export const ItemInfo = styled.div`
@@ -41,6 +63,7 @@ export const ItemInfo = styled.div`
 `;
 
 export const RecommendationArea = styled.div`
+  width: 60%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,12 +72,4 @@ export const RecommendationArea = styled.div`
   p {
     margin-left: 10px;
   }
-`;
-
-export const InputBlock = styled.div`
-  width: 40%;
-
-  display: flex;
-  align-items: center;
-  flex-direction: row;
 `;
