@@ -22,4 +22,9 @@ export default interface ICompositionProps {
   formatted_size: number | undefined;
   subcategory_id: string;
   subcategory_name: string;
+
+  total: {
+    amount: number;
+    price: number;
+  };
 }

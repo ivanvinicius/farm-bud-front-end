@@ -14,10 +14,10 @@ export const HeaderInfo = styled.div`
   box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.1);
 
   div {
-    width: 40%;
+    width: 50%;
 
     &:first-child {
-      width: 60%;
+      width: 50%;
     }
 
     strong {
@@ -31,7 +31,8 @@ export const List = styled.div`
   margin: 10px auto;
 
   p {
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 30px;
   }
 `;
 
@@ -49,7 +50,7 @@ export const ItemOfList = styled.div`
 `;
 
 export const ItemInfo = styled.div`
-  width: 40%;
+  width: 50%;
 
   div {
     display: flex;
@@ -63,13 +64,9 @@ export const ItemInfo = styled.div`
 `;
 
 export const RecommendationArea = styled.div`
-  width: 60%;
+  width: 50%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  flex-direction: row;
-
-  p {
-    margin-left: 10px;
-  }
+  flex-direction: column;
 `;

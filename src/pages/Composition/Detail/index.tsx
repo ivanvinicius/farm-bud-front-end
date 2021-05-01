@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Header from '../../../components/Header';
@@ -27,6 +28,12 @@ interface ILocationProps {
   };
 }
 
+interface ICalculateTotalProps {
+  size: number;
+  recommendation: number;
+  price: number;
+}
+
 const CompositionDetail: React.FC = () => {
   const { item } = useLocation().state as ILocationProps;
   const [compositionItems, setCompositionItems] = useState<ICompositionProps[]>(
@@ -37,9 +44,7 @@ const CompositionDetail: React.FC = () => {
   useEffect(() => {
     const formattedPrices: Array<number> = [0];
 
-    compositionItems.map(({ price }) =>
-      formattedPrices.push(parseFloat(price)),
-    );
+    compositionItems.map(({ total }) => formattedPrices.push(total.price));
 
     const total = formattedPrices.reduce(
       (acc, currentValue) => acc + currentValue,
@@ -47,6 +52,38 @@ const CompositionDetail: React.FC = () => {
 
     setTotalPrice(total);
   }, [compositionItems]);
+
+  const calculateTotalPrice = useCallback(
+    ({ size, recommendation, price }: ICalculateTotalProps) => {
+      let count = 1;
+      const originalSize = size;
+      let restDivision = 0;
+
+      restDivision = recommendation % originalSize;
+
+      if (size < recommendation) {
+        while (size <= recommendation) {
+          count += 1;
+          size += size;
+        }
+
+        if (restDivision !== 0) {
+          count += 1;
+        }
+
+        return {
+          amount: count,
+          price: count * price,
+        };
+      }
+
+      return {
+        amount: count,
+        price,
+      };
+    },
+    [],
+  );
 
   useEffect(() => {
     api
@@ -57,20 +94,26 @@ const CompositionDetail: React.FC = () => {
         },
       })
       .then((response) => {
-        const formattedItems = response.data.map((currentItem: any) => ({
-          ...currentItem,
-          formatted_price: `R$ ${formatToStringBRL(currentItem.price)}`,
+        const formattedItems = response.data.map((current: any) => ({
+          ...current,
+          formatted_price: `R$ ${formatToStringBRL(current.price)}`,
           formatted_recommendation: `${formatToStringBRL(
-            currentItem.recommendation,
-          )} ${currentItem.measure_name}`,
-          formatted_size: `${formatToStringBRL(currentItem.size)} ${
-            currentItem.measure_name
-          }(s)`,
+            current.recommendation,
+          )} ${current.measure_name}`,
+          formatted_size: `${formatToStringBRL(current.size)} ${
+            current.measure_name
+          }`,
+
+          total: calculateTotalPrice({
+            size: parseFloat(current.size),
+            recommendation: parseFloat(current.recommendation),
+            price: parseFloat(current.price),
+          }),
         }));
 
         setCompositionItems(formattedItems);
       });
-  }, [item]);
+  }, [item, calculateTotalPrice]);
 
   return (
     <>
@@ -86,7 +129,7 @@ const CompositionDetail: React.FC = () => {
         </div>
 
         <div>
-          <strong>Quantidade de produtos:</strong>
+          <strong>Total de itens:</strong>
           <p>{compositionItems.length}</p>
           <br />
           <strong>Valor da composição:</strong>
@@ -101,19 +144,19 @@ const CompositionDetail: React.FC = () => {
             formatted_size,
             formatted_price,
             formatted_recommendation,
+            total,
           }: ICompositionProps) => (
             <ItemOfList key={id}>
               <ItemInfo>
-                <div>
-                  <strong>{`${product_name}  `}</strong>
-                  <p>{formatted_size}</p>
-                </div>
-
-                <p>{formatted_price}</p>
+                <strong>{product_name}</strong>
+                <p>{`Tamanho: ${formatted_size}`}</p>
+                <p>{`Valor: ${formatted_price}`}</p>
               </ItemInfo>
 
               <RecommendationArea>
-                <p>{`${formatted_recommendation} em 1 hectere`}</p>
+                <strong>Recomendação para 1 hectare</strong>
+                <p>{`Recomendação: ${formatted_recommendation} / ${total.amount} unidades`}</p>
+                <p>{`Valor total: R$ ${formatToStringBRL(String(total.price))}`}</p> {/*eslint-disable-line*/}
               </RecommendationArea>
             </ItemOfList>
           ),
