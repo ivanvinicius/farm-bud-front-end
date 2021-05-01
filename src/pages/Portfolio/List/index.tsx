@@ -138,6 +138,7 @@ const ListPortfolio: React.FC = () => {
           delete: {
             apiURL: '/portfolios',
             columnNameAccessor: 'id',
+            isMultiSelect: true,
           },
         }}
       />

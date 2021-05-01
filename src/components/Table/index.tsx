@@ -1,4 +1,5 @@
 /* eslint @typescript-eslint/no-explicit-any: 0 */
+/* eslint array-callback-return: 0 */
 
 import React, { useState, useMemo, useCallback } from 'react';
 import {
@@ -47,7 +48,8 @@ interface ITableProps {
     };
     delete?: {
       apiURL: string;
-      columnNameAccessor: string;
+      columnNameAccessor: Array<string> | string;
+      isMultiSelect: boolean;
     };
     detail?: {
       pageURL: string;
@@ -146,13 +148,31 @@ const Table: React.FC<ITableProps> = ({
   }, [selectedRowIds]);
 
   useMemo(() => {
-    const columnAccessor = String(actions?.delete?.columnNameAccessor);
+    if (typeof actions?.delete?.columnNameAccessor === 'string') {
+      const columnAccessor = String(actions?.delete?.columnNameAccessor);
 
-    const selectedRows: Array<string> = selectedFlatRows.map(
-      (row: any) => row?.original[columnAccessor],
-    );
+      const selectedRows: Array<string> = selectedFlatRows.map(
+        (row: any) => row?.original[columnAccessor],
+      );
 
-    setItemsToDelete(selectedRows);
+      setItemsToDelete(selectedRows);
+    } else {
+      const columnAcessors = actions?.delete?.columnNameAccessor;
+
+      if (columnAcessors) {
+        let cultureValue = '';
+        let productivityValue = '';
+
+        selectedFlatRows.map((row: any) => {
+          cultureValue = row?.original[String(columnAcessors[0])];
+          productivityValue = row?.original[String(columnAcessors[1])];
+
+          return;
+        });
+
+        setItemsToDelete([cultureValue, productivityValue]);
+      }
+    }
   }, [selectedFlatRows, actions]);
 
   const handleActionSelect = useCallback(() => {
@@ -184,27 +204,67 @@ const Table: React.FC<ITableProps> = ({
 
   const handleActionDelete = useCallback(async () => {
     try {
-      const columnAccessor = actions?.delete?.columnNameAccessor;
+      if (typeof actions?.delete?.columnNameAccessor === 'string') {
+        const columnAccessor = actions?.delete?.columnNameAccessor;
 
-      if (columnAccessor) {
-        const response = await api.delete(`${actions?.delete?.apiURL}`, {
-          data: { ids: itemsToDelete },
-        });
+        if (columnAccessor) {
+          const response = await api.delete(`${actions?.delete?.apiURL}`, {
+            data: { ids: itemsToDelete },
+          });
 
-        if (!response) {
-          throw new Error();
+          if (!response) {
+            throw new Error();
+          }
+
+          const dataFiltered = data.filter((item: any) => {
+            return !itemsToDelete.includes(item[columnAccessor]);
+          });
+
+          setData(dataFiltered);
+
+          toast.success('Exclusão realizada.');
         }
+      } else {
+        const columnAccessor = actions?.delete?.columnNameAccessor;
 
-        const dataFiltered = data.filter((item: any) => {
-          return !itemsToDelete.includes(item[columnAccessor]);
-        });
+        if (columnAccessor) {
+          const response = await api.delete(`${actions?.delete?.apiURL}`, {
+            params: {
+              culture_id: itemsToDelete[0],
+              productivity: itemsToDelete[1],
+            },
+          });
 
-        setData(dataFiltered);
+          if (!response) {
+            throw new Error();
+          }
 
-        toast.success('Exclusão realizada.');
+          const dataFiltered = data.filter((item: any) => {
+            return !(
+              itemsToDelete[0] === item[columnAccessor[0]] &&
+              itemsToDelete[1] === item[columnAccessor[1]]
+            );
+          });
+
+          setData(dataFiltered);
+
+          toast.success('Exclusão realizada.');
+        }
       }
     } catch (err) {
-      toast.error('Ocorreu um erro durante a exclusão.');
+      if (err.message === 'Network Error') {
+        toast.error('Não há conexão com a API');
+
+        return;
+      }
+
+      if (err instanceof Error) {
+        toast.error('Houve um erro interno na aplicação');
+
+        return;
+      }
+
+      toast.error('Ocorreu um desconhecido durante a exclusão.');
     }
 
     handleToggleModal();
@@ -221,8 +281,8 @@ const Table: React.FC<ITableProps> = ({
       <Modal isOpen={modalIsOpen} onRequestClose={handleToggleModal}>
         <ModalContent>
           <span>
-            Você está prestes a realizar a exclusão de produtos, tem certeza que
-            deseja continuar?
+            Você está prestes a realizar a exclusão de registro(s), tem certeza
+            que deseja continuar?
           </span>
 
           <div>
@@ -343,7 +403,11 @@ const Table: React.FC<ITableProps> = ({
 
         {actions?.delete && (
           <ActionButton
-            disabled={buttonDeleteDisabled}
+            disabled={
+              actions.delete.isMultiSelect
+                ? buttonDeleteDisabled
+                : buttonCRUDisabled
+            }
             onClick={() => handleToggleModal()}
             actionType="delete"
           />

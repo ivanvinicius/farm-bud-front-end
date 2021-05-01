@@ -93,6 +93,11 @@ const ListComposition: React.FC = () => {
           detail: {
             pageURL: 'composition-detail',
           },
+          delete: {
+            apiURL: 'providers-compositions',
+            columnNameAccessor: ['culture_id', 'productivity'],
+            isMultiSelect: false,
+          },
         }}
       />
     </Container>
