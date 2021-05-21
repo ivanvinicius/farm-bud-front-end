@@ -24,7 +24,7 @@ export default interface ICompositionProps {
   subcategory_name: string;
 
   total: {
-    amount: number;
+    units: number;
     price: number;
   };
 }

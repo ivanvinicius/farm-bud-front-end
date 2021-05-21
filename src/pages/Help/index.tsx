@@ -57,6 +57,49 @@ const Help: React.FC = () => {
             estão em uso nas composições do estabelecimento.
           </strong>
         </p>
+
+        <h2>Composições</h2>
+        <p>
+          As composições podem ser melhor entendidas como a unção de vários produtos do portfólio,
+          destinadas à uma <strong>cultura</strong>, contendo um <strong>nível de produtividade</strong>. Para visualizar suas
+          comsposições basta acessar a aba <strong>Composições</strong> na tela inicial da aplicação.
+        </p>
+
+        <h2>Cadastrar Composição</h2>
+        <p>
+          Para cadastrar uma nova composição no estabelecimento basta acessar a aba <strong>Composições</strong> na
+          tela incial. Acima da listagem das compições existe a funcionalidade <strong>Adicionar composição ao estabelecimento</strong>, onde
+          o próximo passo é fazer a seleção de uma <strong>cultura</strong> e <strong>nível de produtividade</strong> nos
+          campos acima da listagem de produtos. Na <strong>listagem de produtos</strong> é possivel fazer a seleção dos produtos
+          desejados clicando sobre os mesmos, e logo após clicando em <strong>Selecionar</strong> abaixo da listagem. O último passo
+          é indicar a quantidade recomendada do uso do produto para o cultivo de 1 hectare de plantio.
+        </p>
+        <p>
+          <strong>OBS: Quanto ao nível de produtividade, só é possível fazer o cadastro de uma composição para o nível de produtividade
+            selecionado, na cultura em vigência.</strong>
+        </p>
+
+        <h2>Ver Detalhes da Composição</h2>
+        <p>
+          Para ver os detalhes de uma composição no estabelecimento basta acessar a aba <strong>Composições</strong> na
+          tela incial. Abaixo da listagem das compições existe a funcionalidade <strong>Ver detalhes</strong> que
+          fica habitada quando uma composição da listagem é marcada. Clicando na funciondalidade é possível ver os
+          detalhes da composição na tela seguinte.
+        </p>
+
+        <h2>Deletar Composição</h2>
+        <p>
+          Para deletar uma composição no estabelecimento basta acessar a aba <strong>Composições</strong> na
+          tela incial. Abaixo da listagem das compições existe a funcionalidade <strong>Excluir</strong> que
+          fica habitada quando uma composição da listagem é marcada. Clicando na funciondalidade uma tela de
+          confirmação aparecerá, onde é preciso confirmar a ação.
+        </p>
+        <p>
+          <strong>
+            OBS: Não será possível excluir composições utilizadas pelos agricultores.
+          </strong>
+        </p>
+
       </HelpContainer>
     </Container>
   );

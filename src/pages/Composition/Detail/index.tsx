@@ -29,9 +29,9 @@ interface ILocationProps {
 }
 
 interface ICalculateTotalProps {
-  size: number;
-  recommendation: number;
-  price: number;
+  size: string;
+  recommendation: string;
+  price: string;
 }
 
 const CompositionDetail: React.FC = () => {
@@ -53,33 +53,22 @@ const CompositionDetail: React.FC = () => {
     setTotalPrice(total);
   }, [compositionItems]);
 
-  const calculateTotalPrice = useCallback(
+  const calculateAmount = useCallback(
     ({ size, recommendation, price }: ICalculateTotalProps) => {
-      let count = 1;
-      const originalSize = size;
-      let restDivision = 0;
+      const parsedSize = parseFloat(size);
+      const parsedRecommendation = parseFloat(recommendation);
+      const parsedPrice = parseFloat(price);
 
-      restDivision = recommendation % originalSize;
+      let units = parsedRecommendation / parsedSize;
+      const restDivision = parsedRecommendation % parsedSize;
 
-      if (size < recommendation) {
-        while (size <= recommendation) {
-          count += 1;
-          size += size;
-        }
-
-        if (restDivision !== 0) {
-          count += 1;
-        }
-
-        return {
-          amount: count,
-          price: count * price,
-        };
+      if (restDivision !== 0) {
+        units = Math.ceil(units);
       }
 
       return {
-        amount: count,
-        price,
+        units,
+        price: units * parsedPrice,
       };
     },
     [],
@@ -104,16 +93,16 @@ const CompositionDetail: React.FC = () => {
             current.measure_name
           }`,
 
-          total: calculateTotalPrice({
-            size: parseFloat(current.size),
-            recommendation: parseFloat(current.recommendation),
-            price: parseFloat(current.price),
+          total: calculateAmount({
+            size: current.size,
+            recommendation: current.recommendation,
+            price: current.price,
           }),
         }));
 
         setCompositionItems(formattedItems);
       });
-  }, [item, calculateTotalPrice]);
+  }, [item, calculateAmount]);
 
   return (
     <>
@@ -155,7 +144,7 @@ const CompositionDetail: React.FC = () => {
 
               <RecommendationArea>
                 <strong>Recomendação para 1 hectare</strong>
-                <p>{`Recomendação: ${formatted_recommendation} / ${total.amount} unidades`}</p>
+                <p>{`Recomendação: ${formatted_recommendation} / ${total.units} unidades`}</p>
                 <p>{`Valor total: R$ ${formatToStringBRL(String(total.price))}`}</p> {/*eslint-disable-line*/}
               </RecommendationArea>
             </ItemOfList>
